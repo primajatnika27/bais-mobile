@@ -1,29 +1,10 @@
 workflows:
-  build-with-tag:
-    name: Build Specific Flavor Based on Tag
+  build-all-flavors:
+    name: Build All Flavors with Version Update
     max_build_duration: 60
     environment:
       flutter: stable
-      vars:
-        FLUTTER_BUILD_TAG: $BUILD_TAG # Tag dari pipeline atau Git
     scripts:
-      - name: Parse Build Tag
-        script: |
-          # Ambil bagian terakhir dari tag (contoh: "release")
-          TAG_SUFFIX=$(echo "$FLUTTER_BUILD_TAG" | awk -F'-' '{print $NF}')
-          if [[ "$TAG_SUFFIX" == "dev" ]]; then
-            FLUTTER_BUILD_FLAVOR="dev"
-          elif [[ "$TAG_SUFFIX" == "baisdev" ]]; then
-            FLUTTER_BUILD_FLAVOR="baisdev"
-          elif [[ "$TAG_SUFFIX" == "stag" ]]; then
-            FLUTTER_BUILD_FLAVOR="stag"
-          elif [[ "$TAG_SUFFIX" == "release" ]]; then
-            FLUTTER_BUILD_FLAVOR="prod"
-          else
-            echo "Invalid tag suffix: $TAG_SUFFIX"
-            exit 1
-          fi
-          echo "Building flavor: $FLUTTER_BUILD_FLAVOR"
       - name: Update version in pubspec.yaml
         script: |
           VERSION_NAME=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
@@ -34,12 +15,17 @@ workflows:
       - name: Install dependencies
         script: |
           flutter packages get
-      - name: Build APK with Parsed Flavor
+      - name: Build dev flavor
         script: |
-          flutter build apk --flavor $FLUTTER_BUILD_FLAVOR
-      - name: Build iOS App (Optional)
+          flutter build apk --flavor dev
+      - name: Build baisdev flavor
         script: |
-          flutter build ios --flavor $FLUTTER_BUILD_FLAVOR
+          flutter build apk --flavor baisdev
+      - name: Build stag flavor
+        script: |
+          flutter build apk --flavor stag
+      - name: Build prod flavor
+        script: |
+          flutter build apk --flavor prod
     artifacts:
       - build/**/outputs/**/*.apk
-      - build/ios/ipa/**/*.ipa
