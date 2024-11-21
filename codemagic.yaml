@@ -1,0 +1,31 @@
+workflows:
+  build-all-flavors:
+    name: Build All Flavors with Version Update
+    max_build_duration: 60
+    environment:
+      flutter: stable
+    scripts:
+      - name: Update version in pubspec.yaml
+        script: |
+          VERSION_NAME=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f2)
+          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 1))
+          sed -i.bak "s/^version:.*/version: $VERSION_NAME+$NEW_BUILD_NUMBER/" pubspec.yaml
+          echo "Updated version to $VERSION_NAME+$NEW_BUILD_NUMBER"
+      - name: Install dependencies
+        script: |
+          flutter packages get
+      - name: Build dev flavor
+        script: |
+          flutter build apk --flavor dev
+      - name: Build baisdev flavor
+        script: |
+          flutter build apk --flavor baisdev
+      - name: Build stag flavor
+        script: |
+          flutter build apk --flavor stag
+      - name: Build prod flavor
+        script: |
+          flutter build apk --flavor prod
+    artifacts:
+      - build/**/outputs/**/*.apk
