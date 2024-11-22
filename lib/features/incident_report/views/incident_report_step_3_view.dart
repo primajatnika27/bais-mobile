@@ -1,3 +1,4 @@
+import 'package:bais_mobile/core/snackbar/general_snackbar.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/bottom_button_widget.dart';
 import 'package:bais_mobile/features/incident_report/controllers/incident_report_controller.dart';
@@ -17,7 +18,7 @@ class IncidentReportStep3View extends GetView<IncidentReportController> {
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(16),
-          children: [
+          children: const [
             IncidentLocationTab(),
           ],
         ),
@@ -25,6 +26,8 @@ class IncidentReportStep3View extends GetView<IncidentReportController> {
       bottomNavigationBar: BottomButtonWidget(
         title: 'Submit',
         onTap: () {
+          controller.onSubmitTaskReport();
+          Get.back();
         },
       ),
     );

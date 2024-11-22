@@ -17,7 +17,7 @@ class IncidentReportStep1View extends GetView<IncidentReportController> {
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(16),
-          children: [
+          children: const [
             IncidentFormTab(),
           ],
         ),

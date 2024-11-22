@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:bais_mobile/core/helpers/database_helper.dart';
+import 'package:bais_mobile/core/snackbar/general_snackbar.dart';
 import 'package:bais_mobile/core/widgets/dropdown_input.dart';
 import 'package:bais_mobile/core/widgets/photo_section_input.dart';
+import 'package:bais_mobile/data/models/form_data/task_report_form_data.dart';
+import 'package:bais_mobile/data/models/task_report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:get/get.dart';
@@ -7,6 +13,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class IncidentReportController extends GetxController {
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+
   final TextEditingController reporterNameController = TextEditingController();
   final TextEditingController incidentDateController = TextEditingController();
   final TextEditingController incidentTimeController = TextEditingController();
@@ -18,9 +26,10 @@ class IncidentReportController extends GetxController {
   final DropdownController<String> incidentTypeController =
       DropdownController<String>();
   final List<String> incidentType = [
-    'A',
-    'B',
-    'C',
+    'Medical Incident',
+    'Minor Incident',
+    'Near Miss',
+    'Potential Hazard',
   ];
 
   final DropdownController<String> incidentLevelController =
@@ -52,6 +61,9 @@ class IncidentReportController extends GetxController {
   var markers = <Marker>{}.obs;
   var address = ''.obs;
 
+  /// Payload
+  var payload = TaskReportModel();
+
   @override
   void onInit() {
     super.onInit();
@@ -80,6 +92,31 @@ class IncidentReportController extends GetxController {
 
   void updateAddress(String newAddress) {
     address.value = newAddress;
+  }
+
+  void onSubmitTaskReport() async {
+    payload.reporterName = reporterNameController.text;
+    payload.incidentDate = incidentDateController.text;
+    payload.incidentTime = incidentTimeController.text;
+    payload.incidentDescription = incidentDescriptionController.text;
+    payload.incidentType = incidentTypeController.selectedValue.value;
+    payload.incidentLevel = incidentLevelController.selectedValue.value;
+    payload.incidentPhotoPath = incidentPhotoModel.value.selectedImagePath;
+    payload.incidentLocationLat = currentLat.value;
+    payload.incidentLocationLng = currentLong.value;
+    payload.incidentLocationAddress = location.value;
+
+    String data = jsonEncode(payload.toJson());
+    print("======== PAYLOAD ========");
+    print(data);
+    saveDataToLocal(data);
+  }
+
+  Future<void> saveDataToLocal(String data) async {
+    final formData = TaskReportFormData(
+      payload: data,
+    );
+    await _dbHelper.insertTaskReport(formData);
   }
 
   Future<String> getAddressFromLatLng(LatLng position) async {

@@ -1,6 +1,7 @@
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/app_bar_general.dart';
 import 'package:bais_mobile/core/widgets/custom_tab_slider.dart';
+import 'package:bais_mobile/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:bais_mobile/features/incident_report/controllers/incident_report_controller.dart';
 import 'package:bais_mobile/features/incident_report/views/incident_report_step_1_view.dart';
 import 'package:bais_mobile/features/incident_report/views/incident_report_step_2_view.dart';
@@ -18,7 +19,9 @@ class IncidentReportView extends GetView<IncidentReportController> {
       appBar: AppBarGeneral(
         title: 'Input Report Incident',
         withTabBar: true,
-        onTapLeading: () => Navigator.pop(context),
+        onTapLeading: () {
+          Get.back();
+        },
       ),
       body: SafeArea(
         child: Column(

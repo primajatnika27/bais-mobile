@@ -23,7 +23,8 @@ class IncidentLocationTab extends GetView<IncidentReportController> {
   }
 
   Widget selectorMiniMap() {
-    LatLng initialPosition = LatLng(controller.currentLat.value, controller.currentLong.value);
+    LatLng initialPosition = LatLng(
+        controller.currentLat.value, controller.currentLong.value);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,9 +45,12 @@ class IncidentLocationTab extends GetView<IncidentReportController> {
               buildingsEnabled: true,
               mapType: MapType.terrain,
               zoomControlsEnabled: false,
-              scrollGesturesEnabled: false, // Disable scrolling
-              zoomGesturesEnabled: false, // Disable zooming
-              rotateGesturesEnabled: false, // Disable rotating
+              scrollGesturesEnabled: false,
+              // Disable scrolling
+              zoomGesturesEnabled: false,
+              // Disable zooming
+              rotateGesturesEnabled: false,
+              // Disable rotating
               tiltGesturesEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: initialPosition,
@@ -62,18 +66,22 @@ class IncidentLocationTab extends GetView<IncidentReportController> {
           ),
         ),
         const SizedBox(height: 16),
-        GestureDetector(
-          onTap: () => Get.toNamed(Routes.incidentReportMaps),
-          child: InfoCard(
-            text: controller.address.value != '' ? controller.address.value : '-',
-            borderColor: AppTheme.primary,
-            backgroundColor: const Color(0XFFF9FAFB),
-            icon: const Icon(
-              Icons.location_on,
-              color: AppTheme.primary,
+        Obx(() {
+          return GestureDetector(
+            onTap: () => Get.toNamed(Routes.incidentReportMaps),
+            child: InfoCard(
+              text: controller.address.value != ''
+                  ? controller.address.value
+                  : '-',
+              borderColor: AppTheme.primary,
+              backgroundColor: const Color(0XFFF9FAFB),
+              icon: const Icon(
+                Icons.location_on,
+                color: AppTheme.primary,
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ],
     );
   }
