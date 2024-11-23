@@ -12,6 +12,7 @@ class TextAreaInput extends StatelessWidget {
   final ValueChanged<String>? onChange;
   final VoidCallback? onEditingComplete;
   final String? semanticLabel;
+  final bool? isEnabled;
 
   const TextAreaInput({
     super.key,
@@ -26,6 +27,7 @@ class TextAreaInput extends StatelessWidget {
     this.onChange,
     this.onEditingComplete,
     this.semanticLabel,
+    this.isEnabled,
   });
 
   @override
@@ -70,6 +72,7 @@ class TextAreaInput extends StatelessWidget {
             container: true,
             identifier: semanticLabel,
             child: TextField(
+              enabled: isEnabled,
               controller: controller,
               maxLines: maxLines,
               onChanged: onChange,

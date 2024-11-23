@@ -14,9 +14,9 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "Maruti Bais Mobile",
+      title: "SII Mobile",
       theme: ThemeData(
-        fontFamily: 'Rubik',
+        fontFamily: 'Inter',
         useMaterial3: false,
       ),
       getPages: AppPages.routes,

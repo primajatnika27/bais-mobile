@@ -36,14 +36,14 @@ class SignInView extends GetView<SignInController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 32),
-                      Image.asset(
-                        'assets/images/logo-maruti.png',
-                        height: 120,
-                      ),
+                      const SizedBox(height: 132),
+                      // Image.asset(
+                      //   'assets/images/logo-maruti.png',
+                      //   height: 120,
+                      // ),
                       const SizedBox(height: 16),
                       const Text(
-                        "Welcome to Bais Mobile",
+                        "Welcome to SII Mobile",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

@@ -44,7 +44,6 @@ class TaskItemWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 40,
-                  height: 40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: color,

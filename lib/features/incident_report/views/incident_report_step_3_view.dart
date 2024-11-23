@@ -1,3 +1,4 @@
+import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/snackbar/general_snackbar.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/bottom_button_widget.dart';
@@ -27,7 +28,7 @@ class IncidentReportStep3View extends GetView<IncidentReportController> {
         title: 'Submit',
         onTap: () {
           controller.onSubmitTaskReport();
-          Get.back();
+          Get.offAndToNamed(Routes.home);
         },
       ),
     );

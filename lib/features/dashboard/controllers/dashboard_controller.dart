@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:bais_mobile/core/helpers/database_helper.dart';
+import 'package:bais_mobile/data/models/task_model.dart';
 import 'package:bais_mobile/data/models/task_report_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
@@ -11,6 +13,9 @@ import 'package:rubber/rubber.dart';
 class DashboardController extends GetxController
     with GetTickerProviderStateMixin {
   final DatabaseHelper _dbHelper = DatabaseHelper();
+
+  // Firebase FireStore instance
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   var location = "Search Location...".obs;
   final currentLocation = Rx<LatLng?>(null);
@@ -23,58 +28,81 @@ class DashboardController extends GetxController
   var markers = <Marker>{}.obs;
   var address = ''.obs;
 
-  /// Dashboard Data
-  var lastTimeIncidentTotal = 0.obs;
-  var medicalTreatmentTotal = 0.obs;
-  var minorIncidentTotal = 0.obs;
-  var nearMissTotal = 0.obs;
-  var potentialHazardTotal = 0.obs;
+  var newTaskTotal = 0.obs;
+  var onGoingTaskTotal = 0.obs;
+  var submittedTaskTotal = 0.obs;
+  var completedTaskTotal = 0.obs;
+  var rejectedTaskTotal = 0.obs;
 
   var taskReports = <TaskReportModel>[].obs;
+  var tasks = <TaskModel?>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     getLocation();
-    getLocalData();
+    getIncidentData();
   }
 
   @override
   Future<void> refresh() async {}
 
-  void getLocalData() async {
-    List<String> data = await _dbHelper.getAllTaskReport();
-    taskReports.value = data.map((jsonString) {
-      return TaskReportModel.fromJson(jsonDecode(jsonString));
-    }).toList();
+  void getIncidentData() async {
+    print("Loading data from Firestore");
+    try {
+      // Fetch data from Firestore
+      QuerySnapshot snapshot = await _fireStore.collection('incident').get();
 
-    lastTimeIncidentTotal.value = taskReports
-        .where((element) => element.incidentType == "Last Time Incident")
-        .length;
-    medicalTreatmentTotal.value = taskReports
-        .where((element) => element.incidentType == "Medical Incident")
-        .length;
-    minorIncidentTotal.value = taskReports
-        .where((element) => element.incidentType == "Minor Incident")
-        .length;
-    nearMissTotal.value = taskReports
-        .where((element) => element.incidentType == "Near Miss")
-        .length;
-    potentialHazardTotal.value = taskReports
-        .where((element) => element.incidentType == "Potential Hazard")
-        .length;
+      // Map the documents to TaskReportModel
+      taskReports.value = snapshot.docs.map((doc) {
+        return TaskReportModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
 
-    markers.value = taskReports.asMap().entries.map((entry) {
-      int index = entry.key;
-      TaskReportModel report = entry.value;
-      return Marker(
-        markerId: MarkerId((index + 1).toString()), // Use index + 1 as ID
-        position:
-            LatLng(report.incidentLocationLat!, report.incidentLocationLng!),
-        infoWindow: InfoWindow(
-            title: report.incidentType, snippet: report.incidentDescription),
-      );
-    }).toSet();
+      // Create markers for each task report
+      markers.value = taskReports.asMap().entries.map((entry) {
+        int index = entry.key;
+        TaskReportModel report = entry.value;
+        return Marker(
+          markerId: MarkerId((index + 1).toString()), // Use index + 1 as ID
+          position:
+          LatLng(report.incidentLocationLat!, report.incidentLocationLng!),
+          infoWindow: InfoWindow(
+              title: report.incidentType, snippet: report.incidentDescription),
+        );
+      }).toSet();
+    } catch (e) {
+      print("Error fetching data from Firestore: $e");
+    }
+  }
+
+  void fetchTasks() async {
+    try {
+      // Fetch data from Firestore
+      QuerySnapshot snapshot = await _fireStore.collection('tasks').get();
+
+      // Map the documents to TaskReportModel
+      tasks.value = snapshot.docs.map((doc) {
+        return TaskModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      newTaskTotal.value = tasks
+          .where((element) => element?.status == "New Task")
+          .length;
+      onGoingTaskTotal.value = tasks
+          .where((element) => element?.status == "On Going")
+          .length;
+      submittedTaskTotal.value = tasks
+          .where((element) => element?.status == "Submitted")
+          .length;
+      completedTaskTotal.value = tasks
+          .where((element) => element?.status == "Completed")
+          .length;
+      rejectedTaskTotal.value = tasks
+          .where((element) => element?.status == "Reject")
+          .length;
+    } catch (e) {
+      print("Error fetching data from Firestore: $e");
+    }
   }
 
   Future<String> getAddressFromLatLng(LatLng position) async {
@@ -139,6 +167,6 @@ class DashboardController extends GetxController
     currentLat.value = locationData.latitude!;
     currentLong.value = locationData.longitude!;
     markers.clear();
-    getLocalData();
+    getIncidentData();
   }
 }

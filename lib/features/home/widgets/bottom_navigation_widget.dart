@@ -35,15 +35,9 @@ class BottomNavigationWidget extends StatelessWidget {
               NavigationItem(
                 active: navigationController.currentIndex.value == 1,
                 icon: 'history',
-                label: "History Task",
+                label: "Task",
                 onTap: () => navigationController.changePage(1),
               ),
-              // NavigationItem(
-              //   active: navigationController.currentIndex.value == 2,
-              //   icon: 'notification',
-              //   label: "Notification",
-              //   onTap: () => navigationController.changePage(2),
-              // ),
               // NavigationItem(
               //   active: navigationController.currentIndex.value == 3,
               //   icon: 'profile',

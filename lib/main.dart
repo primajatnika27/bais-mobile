@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 Future<void> mainCommon(EnvConfig env) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     AppWidget(
       initialRoute: await AppPages.initialRoute,

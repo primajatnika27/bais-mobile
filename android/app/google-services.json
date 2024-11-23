@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "737957067664",
+    "project_id": "bais-5dc83",
+    "storage_bucket": "bais-5dc83.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737957067664:android:a3f1ec55d8d63ff4cd9115",
+        "android_client_info": {
+          "package_name": "com.tabeldata.bais_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy4N6evJNVoa4GRNjsU_d8uzbLGqI9hc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737957067664:android:2ee50593e05a4c17cd9115",
+        "android_client_info": {
+          "package_name": "com.tabeldata.bais_mobile.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy4N6evJNVoa4GRNjsU_d8uzbLGqI9hc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

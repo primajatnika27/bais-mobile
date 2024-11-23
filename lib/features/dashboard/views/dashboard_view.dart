@@ -4,12 +4,9 @@ import 'package:bais_mobile/features/dashboard/controllers/dashboard_controller.
 import 'package:bais_mobile/features/dashboard/widgets/location_widget.dart';
 import 'package:bais_mobile/features/dashboard/widgets/task_card.dart';
 import 'package:bais_mobile/features/dashboard/widgets/user_widget.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rubber/rubber.dart';
 
@@ -40,7 +37,8 @@ class _DashboardViewState extends State<DashboardView>
         ratio: 1.1,
       ),
     );
-    controller.getLocalData();
+    controller.getIncidentData();
+    controller.fetchTasks();
   }
 
   void expandSheet() {
@@ -59,13 +57,13 @@ class _DashboardViewState extends State<DashboardView>
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton.small(
-              heroTag: 'call-incident',
-              backgroundColor: AppTheme.primary,
-              onPressed: () {},
-              child: const Icon(Icons.call, color: AppTheme.white),
-            ),
-            const SizedBox(height: 16),
+            // FloatingActionButton.small(
+            //   heroTag: 'call-incident',
+            //   backgroundColor: AppTheme.primary,
+            //   onPressed: () {},
+            //   child: const Icon(Icons.call, color: AppTheme.white),
+            // ),
+            // const SizedBox(height: 16),
             FloatingActionButton.small(
               heroTag: 'add-incident',
               backgroundColor: AppTheme.primary,
@@ -111,21 +109,25 @@ class _DashboardViewState extends State<DashboardView>
                                 width: 50,
                               ),
                             ),
-                            Column(
+                            const Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(height: 18),
-                                      Image.asset(
-                                        'assets/images/logo-maruti.png',
-                                        height: 60,
+                                      SizedBox(height: 18),
+                                      Text(
+                                        "SII",
+                                        style: TextStyle(
+                                          color: AppTheme.white950,
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                      const LocationWidget(),
-                                      const UserWidget(),
+                                      LocationWidget(),
+                                      UserWidget(),
                                     ],
                                   ),
                                 ),
@@ -176,7 +178,9 @@ class _DashboardViewState extends State<DashboardView>
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: FloatingActionButton.extended(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Get.toNamed(Routes.incidentReportHistory);
+                                      },
                                       label: const Text(
                                         'View List',
                                         style: TextStyle(
@@ -240,7 +244,7 @@ class _DashboardViewState extends State<DashboardView>
               top: 16,
             ),
             child: Text(
-              'Dashboard Report',
+              'Task Summary',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 17,

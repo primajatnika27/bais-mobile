@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class CardWrapperWidget extends StatelessWidget {
   final String? title;
+  final Widget? bottomWidget;
   final String? subtitle;
   final Widget child;
   final double? width;
@@ -11,6 +12,7 @@ class CardWrapperWidget extends StatelessWidget {
 
   const CardWrapperWidget({
     this.width,
+    this.bottomWidget,
     this.height,
     super.key,
     this.title,
@@ -76,6 +78,13 @@ class CardWrapperWidget extends StatelessWidget {
               : const SizedBox(),
           if (title != null || subtitle != null) const Divider(color: Color(0xFFD0D5DD)),
           child,
+          if (bottomWidget != null) const Divider(color: Color(0xFFD0D5DD)),
+          bottomWidget != null
+              ? Padding(
+            padding: const EdgeInsets.all(16),
+            child: bottomWidget,
+          )
+              : const SizedBox(),
         ],
       ),
     );

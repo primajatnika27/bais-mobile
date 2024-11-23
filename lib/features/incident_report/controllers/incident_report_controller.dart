@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:bais_mobile/core/helpers/database_helper.dart';
-import 'package:bais_mobile/core/snackbar/general_snackbar.dart';
+import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/dropdown_input.dart';
 import 'package:bais_mobile/core/widgets/photo_section_input.dart';
 import 'package:bais_mobile/data/models/form_data/task_report_form_data.dart';
 import 'package:bais_mobile/data/models/task_report_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:get/get.dart';
@@ -14,6 +13,9 @@ import 'package:location/location.dart';
 
 class IncidentReportController extends GetxController {
   final DatabaseHelper _dbHelper = DatabaseHelper();
+
+  // Firebase FireStore instance
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   final TextEditingController reporterNameController = TextEditingController();
   final TextEditingController incidentDateController = TextEditingController();
@@ -35,9 +37,9 @@ class IncidentReportController extends GetxController {
   final DropdownController<String> incidentLevelController =
       DropdownController<String>();
   final List<String> incidentLevel = [
-    'Level 1',
-    'Level 2',
-    'Level 3',
+    'Low',
+    'Medium',
+    'High',
   ];
 
   final RxInt currentIndex = 0.obs;
@@ -106,10 +108,13 @@ class IncidentReportController extends GetxController {
     payload.incidentLocationLng = currentLong.value;
     payload.incidentLocationAddress = location.value;
 
-    String data = jsonEncode(payload.toJson());
-    print("======== PAYLOAD ========");
-    print(data);
-    saveDataToLocal(data);
+    await _fireStore.collection('incident').add(payload.toJson());
+    Get.snackbar(
+      'Success',
+      'Incident Report has been submitted',
+      backgroundColor: AppTheme.green500,
+      colorText: Colors.white,
+    );
   }
 
   Future<void> saveDataToLocal(String data) async {

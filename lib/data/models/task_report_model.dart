@@ -30,31 +30,31 @@ class TaskReportModel extends Report {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'incidentType': incidentType,
-      'incidentLevel': incidentLevel,
-      'reporterName': reporterName,
-      'incidentDate': incidentDate,
-      'incidentTime': incidentTime,
-      'incidentDescription': incidentDescription,
-      'incidentPhotoPath': incidentPhotoPath,
-      'incidentLocationLat': incidentLocationLat,
-      'incidentLocationLng': incidentLocationLng,
-      'incidentLocationAddress': incidentLocationAddress,
+      'incident_type': incidentType,
+      'incident_level': incidentLevel,
+      'reporter_name': reporterName,
+      'incident_date': incidentDate,
+      'incident_time': incidentTime,
+      'incident_description': incidentDescription,
+      'incident_photo_path': incidentPhotoPath,
+      'incident_location_lat': incidentLocationLat,
+      'incident_location_lng': incidentLocationLng,
+      'incident_location_address': incidentLocationAddress,
     };
   }
 
   factory TaskReportModel.fromJson(Map<String, dynamic> json) {
     return TaskReportModel(
-      incidentType: json['incidentType'],
-      incidentLevel: json['incidentLevel'],
-      reporterName: json['reporterName'],
-      incidentDate: json['incidentDate'],
-      incidentTime: json['incidentTime'],
-      incidentDescription: json['incidentDescription'],
-      incidentPhotoPath: json['incidentPhotoPath'],
-      incidentLocationLat: json['incidentLocationLat'],
-      incidentLocationLng: json['incidentLocationLng'],
-      incidentLocationAddress: json['incidentLocationAddress'],
+      incidentType: json['incident_type'],
+      incidentLevel: json['incident_level'],
+      reporterName: json['reporter_name'],
+      incidentDate: json['incident_date'],
+      incidentTime: json['incident_time'],
+      incidentDescription: json['incident_description'],
+      incidentPhotoPath: json['incident_photo_path'],
+      incidentLocationLat: json['incident_location_lat'],
+      incidentLocationLng: json['incident_location_lng'],
+      incidentLocationAddress: json['incident_location_address'],
     );
   }
 }
