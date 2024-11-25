@@ -14,23 +14,26 @@ class HomeView extends GetView<NavigationController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        backgroundColor: controller.currentIndex.value == 0 ||
-                controller.currentIndex.value == 1 ||
-                controller.currentIndex.value == 3
-            ? AppTheme.primary
-            : AppTheme.background,
-        body: SafeArea(
-          child: IndexedStack(
-            index: controller.currentIndex.value,
-            children: [
-              controller.currentIndex.value == 0 ? const DashboardView() : Container(),
-              controller.currentIndex.value == 1 ? const TaskView() : Container(),
-              controller.currentIndex.value == 2 ? const ChatBotView() : Container(),
-            ],
+      () => PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: controller.currentIndex.value == 0 ||
+                  controller.currentIndex.value == 1 ||
+                  controller.currentIndex.value == 3
+              ? AppTheme.primary
+              : AppTheme.background,
+          body: SafeArea(
+            child: IndexedStack(
+              index: controller.currentIndex.value,
+              children: [
+                controller.currentIndex.value == 0 ? const DashboardView() : Container(),
+                controller.currentIndex.value == 1 ? const TaskView() : Container(),
+                controller.currentIndex.value == 2 ? const ChatBotView() : Container(),
+              ],
+            ),
           ),
+          bottomNavigationBar: BottomNavigationWidget(),
         ),
-        bottomNavigationBar: BottomNavigationWidget(),
       ),
     );
   }

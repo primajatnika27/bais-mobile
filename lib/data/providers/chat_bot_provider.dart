@@ -12,6 +12,10 @@ class ChatBotProvider {
     });
 
     if (response.statusCode == 200) {
+      print(response.data);
+      if (response.data == 0) {
+        throw Exception('Response data is empty');
+      }
       return ChatBotResponse.fromJson(response.data);
     } else {
       throw Exception('Failed to load announcements');

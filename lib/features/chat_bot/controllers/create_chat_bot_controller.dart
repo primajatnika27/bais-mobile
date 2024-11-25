@@ -37,10 +37,8 @@ class CreateChatBotController extends GetxController {
     );
     chatController.addMessage(message);
 
-    chatViewState.value = ChatViewState.loading;
-    final response = await _chatBotRepository.getPredict(messageValue);
-
     try {
+      chatController.setTypingIndicator = true;
       final response = await _chatBotRepository.getPredict(messageValue);
 
       final botMessage = Message(
@@ -63,6 +61,7 @@ class CreateChatBotController extends GetxController {
       chatViewState.value = ChatViewState.hasMessages;
       chatController.addMessage(botMessage);
       chatController.addMessage(botMessageArticle);
+      chatController.setTypingIndicator = false;
 
     } catch (e) {
       final errorMessage = Message(
@@ -73,6 +72,7 @@ class CreateChatBotController extends GetxController {
         replyMessage: replyMessage,
         messageType: MessageType.text,
       );
+      chatController.setTypingIndicator = false;
       chatController.addMessage(errorMessage);
     } finally {
       chatViewState.value = ChatViewState.hasMessages; // Set state ke hasMessages setelah selesai
