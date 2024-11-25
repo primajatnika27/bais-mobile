@@ -15,6 +15,7 @@ class TaskFilterBadgeList extends StatelessWidget {
       "On Going",
       "Submitted",
       "Completed",
+      "Rejected",
     ];
 
     return SizedBox(

@@ -9,6 +9,7 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onTapLeading;
   final PreferredSizeWidget? bottom;
   final List<Widget>? actions;
+  final Color? backgroundColor;
 
   const AppBarGeneral({
     super.key,
@@ -18,12 +19,13 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
     this.onTapLeading,
     this.bottom,
     this.actions = const [],
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor ?? Colors.white,
       iconTheme: const IconThemeData(
         color: Colors.black, //change your color here
       ),
@@ -43,7 +45,7 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-            color: AppTheme.primary,
+            color: backgroundColor != null ? AppTheme.white : AppTheme.primary,
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: IconButton(
@@ -51,6 +53,7 @@ class AppBarGeneral extends StatelessWidget implements PreferredSizeWidget {
             onPressed: onTapLeading ?? () => Navigator.pop(context),
             icon: SvgPicture.asset(
               'assets/icons/ic_arrow_back.svg',
+              color: backgroundColor != null ? AppTheme.primary : AppTheme.white,
             ),
           ),
         ),

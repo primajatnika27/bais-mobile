@@ -38,14 +38,14 @@ class BottomNavigationWidget extends StatelessWidget {
                 label: "Task",
                 onTap: () => navigationController.changePage(1),
               ),
-              // NavigationItem(
-              //   active: navigationController.currentIndex.value == 3,
-              //   icon: 'profile',
-              //   label: "Profile",
-              //   onTap: () {
-              //     navigationController.changePage(3);
-              //   },
-              // ),
+              NavigationItem(
+                active: navigationController.currentIndex.value == 2,
+                icon: 'notification',
+                label: "Chat",
+                onTap: () {
+                  navigationController.changePage(2);
+                },
+              ),
             ],
           ),
         ),

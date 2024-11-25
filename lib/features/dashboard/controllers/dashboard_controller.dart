@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import 'package:rubber/rubber.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController
     with GetTickerProviderStateMixin {
@@ -37,21 +38,33 @@ class DashboardController extends GetxController
   var taskReports = <TaskReportModel>[].obs;
   var tasks = <TaskModel?>[].obs;
 
+  var usersName = "".obs;
+  var usersId = "".obs;
+
   @override
   void onInit() {
     super.onInit();
     getLocation();
     getIncidentData();
+    getUserData();
   }
 
   @override
   Future<void> refresh() async {}
 
+  Future<void> getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    usersName.value = prefs.getString('userName') ?? '';
+    usersId.value = prefs.getString('userId') ?? '';
+  }
+
   void getIncidentData() async {
     print("Loading data from Firestore");
     try {
       // Fetch data from Firestore
-      QuerySnapshot snapshot = await _fireStore.collection('incident').get();
+      QuerySnapshot snapshot = await _fireStore
+          .collection('incident')
+          .get();
 
       // Map the documents to TaskReportModel
       taskReports.value = snapshot.docs.map((doc) {
@@ -76,9 +89,15 @@ class DashboardController extends GetxController
   }
 
   void fetchTasks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('userEmail');
+
     try {
       // Fetch data from Firestore
-      QuerySnapshot snapshot = await _fireStore.collection('tasks').get();
+      QuerySnapshot snapshot = await _fireStore
+          .collection('tasks')
+          .where('assigned.email', isEqualTo: email)
+          .get();
 
       // Map the documents to TaskReportModel
       tasks.value = snapshot.docs.map((doc) {
@@ -98,7 +117,7 @@ class DashboardController extends GetxController
           .where((element) => element?.status == "Completed")
           .length;
       rejectedTaskTotal.value = tasks
-          .where((element) => element?.status == "Reject")
+          .where((element) => element?.status == "Rejected")
           .length;
     } catch (e) {
       print("Error fetching data from Firestore: $e");

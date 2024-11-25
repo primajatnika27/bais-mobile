@@ -57,20 +57,28 @@ class _DashboardViewState extends State<DashboardView>
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            // FloatingActionButton.small(
-            //   heroTag: 'call-incident',
-            //   backgroundColor: AppTheme.primary,
-            //   onPressed: () {},
-            //   child: const Icon(Icons.call, color: AppTheme.white),
-            // ),
-            // const SizedBox(height: 16),
+            FloatingActionButton.small(
+              heroTag: 'video-incident',
+              backgroundColor: AppTheme.primary,
+              onPressed: () {
+                Get.toNamed(Routes.videoStream);
+              },
+              child: const Icon(
+                Icons.video_call_sharp,
+                color: AppTheme.white,
+              ),
+            ),
+            const SizedBox(height: 16),
             FloatingActionButton.small(
               heroTag: 'add-incident',
               backgroundColor: AppTheme.primary,
               onPressed: () {
                 Get.toNamed(Routes.incidentReport);
               },
-              child: const Icon(Icons.add, color: AppTheme.white),
+              child: const Icon(
+                Icons.add,
+                color: AppTheme.white,
+              ),
             )
           ],
         ),
@@ -179,7 +187,8 @@ class _DashboardViewState extends State<DashboardView>
                                     padding: const EdgeInsets.all(16.0),
                                     child: FloatingActionButton.extended(
                                       onPressed: () {
-                                        Get.toNamed(Routes.incidentReportHistory);
+                                        Get.toNamed(
+                                            Routes.incidentReportHistory);
                                       },
                                       label: const Text(
                                         'View List',

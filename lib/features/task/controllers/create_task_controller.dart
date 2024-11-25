@@ -3,6 +3,7 @@ import 'package:bais_mobile/data/models/task_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateTaskController extends GetxController {
   var tasks = <TaskModel?>[].obs;
@@ -37,6 +38,9 @@ class CreateTaskController extends GetxController {
       case 4:
         filterType.value = 'Completed';
         break;
+      case 5:
+        filterType.value = 'Rejected';
+        break;
     }
 
     fetchTasks(filterType.value);
@@ -49,7 +53,16 @@ class CreateTaskController extends GetxController {
   }
 
   void fetchTasks(String filterType) async {
-    _fireStore.collection('tasks').snapshots().listen(
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('userEmail');
+
+    print(email);
+
+    _fireStore
+        .collection('tasks')
+        .where('assigned.email', isEqualTo: email)
+        .snapshots()
+        .listen(
       (snapshot) {
         print("=========== SNAPSHOTS DATA TASK ===========");
         print(snapshot.docs.length);

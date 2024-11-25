@@ -7,8 +7,9 @@ class TaskModel {
   String? title;
   String? reportTitle;
   String? description;
+  String? address;
   String? result;
-  String? assignedTo;
+  Map<String, dynamic>? assigned;
   String? startDate;
   String? endDate;
   String? status;
@@ -18,8 +19,9 @@ class TaskModel {
     this.title,
     this.reportTitle,
     this.description,
+    this.address,
     this.result,
-    this.assignedTo,
+    this.assigned,
     this.startDate,
     this.endDate,
     this.status
@@ -31,8 +33,9 @@ class TaskModel {
       'title': title,
       'reportTitle': reportTitle,
       'description': description,
+      'address': address,
       'result': result,
-      'assignedTo': assignedTo,
+      'assigned': assigned,
       'startDate': startDate,
       'endDate': endDate,
       'status': status
@@ -45,8 +48,9 @@ class TaskModel {
       title: json['title'],
       reportTitle: json['reportTitle'],
       description: json['description'],
+      address: json['address'],
       result: json['result'],
-      assignedTo: json['assignedTo'],
+      assigned: json['assigned'],
       startDate: json['startDate'],
       endDate: json['endDate'],
       status: json['status']
@@ -60,8 +64,9 @@ class TaskModel {
       title: data['task_title'],
       reportTitle: data['report_title'],
       description: data['task_description'],
+      address: data['address'],
       result: data['task_result'],
-      assignedTo: data['assigned'],
+      assigned: data['assigned'],
       startDate: data['start_date'],
       endDate: data['end_date'],
       status: data['status'],
@@ -73,8 +78,9 @@ class TaskModel {
       'task_title': title,
       'report_title': reportTitle,
       'task_description': description,
+      'address': address,
       'task_result': result,
-      'assigned': assignedTo,
+      'assigned': assigned,
       'start_date': startDate,
       'end_date': endDate,
       'status': status,

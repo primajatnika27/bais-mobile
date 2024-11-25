@@ -61,7 +61,7 @@ class TaskFormView extends GetView<CreateTaskController> {
               title: task.title,
               reportTitle: controller.taskTitleController.text,
               description: task.description,
-              assignedTo: task.assignedTo,
+              assigned: task.assigned,
               startDate: task.startDate,
               endDate: task.endDate,
               result: controller.taskResultController.text,

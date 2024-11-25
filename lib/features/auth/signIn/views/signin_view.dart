@@ -1,7 +1,7 @@
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
-import 'package:bais_mobile/core/widgets/app_bar_general.dart';
 import 'package:bais_mobile/core/widgets/button_widget.dart';
+import 'package:bais_mobile/core/widgets/fade_animation.dart';
 import 'package:bais_mobile/core/widgets/text_field_widget.dart';
 import 'package:bais_mobile/features/auth/signIn/controllers/signin_controller.dart';
 import 'package:flutter/material.dart';
@@ -64,8 +64,8 @@ class SignInView extends GetView<SignInController> {
                           children: [
                             TextFieldWidget(
                               controller: controller.usernameController,
-                              placeholder: "ex: John Doe",
-                              title: "Username",
+                              placeholder: "ex: john@mail.com",
+                              title: "Email",
                             ),
                             const SizedBox(height: 24),
                             Obx(() {
@@ -113,10 +113,32 @@ class SignInView extends GetView<SignInController> {
                                 styleType: ButtonStyleType.fill,
                                 fillColor: AppTheme.primary,
                                 textColor: AppTheme.white950,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 onPressed: () {
-                                  Get.offAllNamed(Routes.home);
+                                  controller.signIn();
                                 },
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            FadeInAnimation(
+                              delay: 2.8,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Don’t have an account?",
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.toNamed(Routes.register);
+                                    },
+                                    child: const Text(
+                                      "Register Now",
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

@@ -223,7 +223,7 @@ class PhotoSectionInput extends StatelessWidget {
                     aspectRatio: isOther ? 2 / 1 : 3 / 2,
                     child: Obx(
                           () => SelectableOptionCard(
-                        label: 'Upload File / Image',
+                        label: 'Upload Image',
                         icon: SvgPicture.asset(
                           "assets/images/svg/ic_camera.svg",
                         ),

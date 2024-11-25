@@ -24,58 +24,82 @@ class TaskDetailView extends GetView<CreateTaskController> {
           Get.back();
         },
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: CardWrapperWidget(
-          title: 'Task ID:  ${task.id}',
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                detailInfo(
-                  'Task Name',
-                  task.title ?? '',
-                  isHighlighted: true,
-                ),
-                detailInfo(
-                  'Description',
-                  task.description ?? '',
-                ),
-                detailInfo(
-                  'Status',
-                  task.status ?? '',
-                  isHighlighted: true,
-                ),
-                detailInfo(
-                  'Assigned To',
-                  task.assignedTo ?? '',
-                ),
-                detailInfo(
-                  'Start Date',
-                  task.startDate ?? '',
-                ),
-                detailInfo(
-                  'End Date',
-                  task.endDate ?? '',
-                ),
-                task.status == 'Submitted' || task.status == 'Completed' || task.status == 'Rejected'
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Result',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: AppTheme.secondary250,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: CardWrapperWidget(
+            title: 'Task ID:  ${task.id}',
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  detailInfo(
+                    'Task Name',
+                    task.title ?? '',
+                    isHighlighted: true,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Address',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: AppTheme.secondary250,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      InfoCard(
+                        text: task.address ?? '',
+                        borderColor: AppTheme.primary,
+                        backgroundColor: AppTheme.red100,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  detailInfo(
+                    'Description',
+                    task.description ?? '',
+                  ),
+                  detailInfo(
+                    'Status',
+                    task.status ?? '',
+                    isHighlighted: true,
+                  ),
+                  detailInfo(
+                    'Assigned To',
+                    task.assigned?['name'] ?? '',
+                  ),
+                  detailInfo(
+                    'Start Date',
+                    task.startDate ?? '',
+                  ),
+                  detailInfo(
+                    'End Date',
+                    task.endDate ?? '',
+                  ),
+                  task.status == 'Submitted' ||
+                          task.status == 'Completed' ||
+                          task.status == 'Rejected'
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Result',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: AppTheme.secondary250,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          InfoCard(text: task.result ?? ''),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
-              ],
+                            const SizedBox(height: 8),
+                            InfoCard(text: task.result ?? ''),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
             ),
           ),
         ),
@@ -95,9 +119,10 @@ class TaskDetailView extends GetView<CreateTaskController> {
                           id: task.id,
                           title: task.title,
                           description: task.description,
-                          assignedTo: task.assignedTo,
+                          assigned: task.assigned,
                           startDate: task.startDate,
                           endDate: task.endDate,
+                          address: task.address,
                           status: 'On Going',
                         );
 

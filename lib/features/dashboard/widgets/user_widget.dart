@@ -1,7 +1,10 @@
+import 'package:bais_mobile/config/routes.dart';
+import 'package:bais_mobile/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:bais_mobile/features/dashboard/widgets/user_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class UserWidget extends StatelessWidget {
+class UserWidget extends GetView<DashboardController> {
   const UserWidget({super.key});
 
   @override
@@ -10,7 +13,9 @@ class UserWidget extends StatelessWidget {
       children: [
         const SizedBox(height: 14),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(Routes.profile);
+          },
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.zero,
             backgroundColor: const Color(0xFFF0F8FF).withOpacity(0.1),
@@ -35,35 +40,37 @@ class UserWidget extends StatelessWidget {
                   child: const UserAvatarWidget(),
                 ),
                 const SizedBox(width: 8),
-                const Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Admin 1xxx",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.white,
+                Expanded(
+                  child: Obx(() {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              controller.usersName.value,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "ID: 001928991",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
+                            const SizedBox(height: 4),
+                            Text(
+                              "ID: ${controller.usersId.value}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
                 ),
               ],
             ),
