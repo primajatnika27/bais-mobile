@@ -88,7 +88,7 @@ class CreateChatBotController extends GetxController {
       Get.snackbar(
         'Upload',
         'Article uploaded successfully',
-        backgroundColor: AppTheme.green100,
+        backgroundColor: AppTheme.green700,
         colorText: Colors.white,
       );
     } else {
