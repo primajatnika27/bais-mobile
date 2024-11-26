@@ -73,7 +73,7 @@ class _DashboardViewState extends State<DashboardView>
               heroTag: 'add-incident',
               backgroundColor: AppTheme.primary,
               onPressed: () {
-                Get.toNamed(Routes.incidentReport);
+                Get.toNamed(Routes.reportLanding);
               },
               child: const Icon(
                 Icons.add,
@@ -177,33 +177,6 @@ class _DashboardViewState extends State<DashboardView>
                                           ),
                                   );
                                 },
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: FloatingActionButton.extended(
-                                      onPressed: () {
-                                        Get.toNamed(
-                                            Routes.incidentReportHistory);
-                                      },
-                                      label: const Text(
-                                        'View List',
-                                        style: TextStyle(
-                                          color: AppTheme.white950,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      icon: SvgPicture.asset(
-                                          'assets/icons/ic_setting_white.svg'),
-                                      backgroundColor: AppTheme.primary,
-                                    ),
-                                  ),
-                                ),
                               ),
                             ],
                           ),

@@ -28,7 +28,6 @@ class IncidentReportStep3View extends GetView<IncidentReportController> {
         title: 'Submit',
         onTap: () {
           controller.onSubmitTaskReport();
-          Get.offAndToNamed(Routes.home);
         },
       ),
     );

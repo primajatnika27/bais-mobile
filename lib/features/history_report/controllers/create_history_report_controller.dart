@@ -5,6 +5,7 @@ import 'package:bais_mobile/data/models/task_report_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateHistoryReportController extends GetxController {
   final DatabaseHelper _dbHelper = DatabaseHelper();
@@ -28,9 +29,14 @@ class CreateHistoryReportController extends GetxController {
 
   void getLocalData() async {
     print("Loading data from Firestore");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString('userId') ?? '';
     try {
       // Fetch data from Firestore
-      QuerySnapshot snapshot = await _fireStore.collection('incident').get();
+      QuerySnapshot snapshot = await _fireStore
+          .collection('incident')
+          .where('user_id', isEqualTo: userId)
+          .get();
 
       // Map the documents to TaskReportModel
       taskReports.value = snapshot.docs.map((doc) {

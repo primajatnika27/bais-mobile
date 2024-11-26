@@ -40,10 +40,18 @@ class BottomNavigationWidget extends StatelessWidget {
               ),
               NavigationItem(
                 active: navigationController.currentIndex.value == 2,
-                icon: 'notification',
+                icon: 'chat',
                 label: "Chat",
                 onTap: () {
                   navigationController.changePage(2);
+                },
+              ),
+              NavigationItem(
+                active: navigationController.currentIndex.value == 3,
+                icon: 'profile',
+                label: "Profile",
+                onTap: () {
+                  navigationController.changePage(3);
                 },
               ),
             ],

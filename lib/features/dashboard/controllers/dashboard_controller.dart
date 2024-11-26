@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:bais_mobile/core/helpers/database_helper.dart';
 import 'package:bais_mobile/data/models/task_model.dart';
 import 'package:bais_mobile/data/models/task_report_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,12 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
-import 'package:rubber/rubber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController
     with GetTickerProviderStateMixin {
-  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   // Firebase FireStore instance
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -60,10 +55,13 @@ class DashboardController extends GetxController
 
   void getIncidentData() async {
     print("Loading data from Firestore");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString('userId') ?? '';
     try {
       // Fetch data from Firestore
       QuerySnapshot snapshot = await _fireStore
           .collection('incident')
+          .where('user_id', isEqualTo: userId)
           .get();
 
       // Map the documents to TaskReportModel

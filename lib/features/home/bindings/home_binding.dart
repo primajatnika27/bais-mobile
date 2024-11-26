@@ -1,6 +1,7 @@
 import 'package:bais_mobile/features/chat_bot/controllers/create_chat_bot_controller.dart';
 import 'package:bais_mobile/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:bais_mobile/features/home/controllers/navigation_controller.dart';
+import 'package:bais_mobile/features/profile/bindings/profile_binding.dart';
 import 'package:get/get.dart';
 
 class HomeBinding extends Bindings {
@@ -9,5 +10,6 @@ class HomeBinding extends Bindings {
     Get.lazyPut(() => NavigationController());
     Get.lazyPut(() => DashboardController());
     Get.lazyPut(() => CreateChatBotController());
+    Get.lazyPut(() => ProfileBinding());
   }
 }

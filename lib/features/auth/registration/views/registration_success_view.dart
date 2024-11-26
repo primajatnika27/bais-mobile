@@ -46,7 +46,7 @@ class RegistrationSuccessView extends StatelessWidget {
               child: CustomElevatedButton(
                 message: "Back to Login",
                 function: () {
-                  Get.offAndToNamed(Routes.signIn);
+                  Get.offAllNamed(Routes.signIn);
                   Get.delete<CreateRegistrationController>();
                 },
                 color: AppTheme.primary,

@@ -3,6 +3,7 @@ abstract class Report {
 }
 
 class TaskReportModel extends Report {
+  String? userId;
   String? incidentType;
   String? incidentLevel;
   String? reporterName;
@@ -15,6 +16,7 @@ class TaskReportModel extends Report {
   String? incidentLocationAddress;
 
   TaskReportModel({
+    this.userId,
     this.incidentType,
     this.incidentLevel,
     this.reporterName,
@@ -30,6 +32,7 @@ class TaskReportModel extends Report {
   @override
   Map<String, dynamic> toJson() {
     return {
+      'user_id': userId,
       'incident_type': incidentType,
       'incident_level': incidentLevel,
       'reporter_name': reporterName,
@@ -45,6 +48,7 @@ class TaskReportModel extends Report {
 
   factory TaskReportModel.fromJson(Map<String, dynamic> json) {
     return TaskReportModel(
+      userId: json['user_id'],
       incidentType: json['incident_type'],
       incidentLevel: json['incident_level'],
       reporterName: json['reporter_name'],

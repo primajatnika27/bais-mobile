@@ -44,34 +44,6 @@ class HistoryReportView extends GetView<CreateHistoryReportController> {
             const SizedBox(height: 16),
             const HistoryDashboard(),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'History Report',
-                    style: TextStyle(
-                      color: AppTheme.secondary800,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: const Text(
-                      'View All',
-                      style: TextStyle(
-                        color: AppTheme.primary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
             Expanded(
               child: Obx(() {
                 return controller.taskReports.isEmpty

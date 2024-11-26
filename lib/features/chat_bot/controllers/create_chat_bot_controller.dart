@@ -1,5 +1,7 @@
+import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/data/repositories/chat_bot_repository.dart';
 import 'package:chatview/chatview.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,17 +52,17 @@ class CreateChatBotController extends GetxController {
         messageType: MessageType.text,
       );
 
-      final botMessageArticle = Message(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        message: response.sumber?.hasilOcrTeks21Pdf ?? 'I\'m sorry, I don\'t understand.',
-        createdAt: DateTime.now(),
-        sentBy: '2',
-        replyMessage: replyMessage,
-        messageType: MessageType.text,
-      );
+      // final botMessageArticle = Message(
+      //   id: DateTime.now().millisecondsSinceEpoch.toString(),
+      //   message: response.sumber?.hasilOcrTeks21Pdf ?? 'I\'m sorry, I don\'t understand.',
+      //   createdAt: DateTime.now(),
+      //   sentBy: '2',
+      //   replyMessage: replyMessage,
+      //   messageType: MessageType.text,
+      // );
       chatViewState.value = ChatViewState.hasMessages;
       chatController.addMessage(botMessage);
-      chatController.addMessage(botMessageArticle);
+      // chatController.addMessage(botMessageArticle);
       chatController.setTypingIndicator = false;
 
     } catch (e) {
@@ -76,6 +78,21 @@ class CreateChatBotController extends GetxController {
       chatController.addMessage(errorMessage);
     } finally {
       chatViewState.value = ChatViewState.hasMessages; // Set state ke hasMessages setelah selesai
+    }
+  }
+
+  void onUploadFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      Get.snackbar(
+        'Upload',
+        'Article uploaded successfully',
+        backgroundColor: AppTheme.green100,
+        colorText: Colors.white,
+      );
+    } else {
+
     }
   }
 

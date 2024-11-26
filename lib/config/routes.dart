@@ -10,7 +10,11 @@ import 'package:bais_mobile/features/history_report/views/history_report_view.da
 import 'package:bais_mobile/features/home/bindings/home_binding.dart';
 import 'package:bais_mobile/features/home/views/home_view.dart';
 import 'package:bais_mobile/features/incident_report/bindings/incident_report_binding.dart';
-import 'package:bais_mobile/features/incident_report/views/incident_report_view.dart';
+import 'package:bais_mobile/features/incident_report/views/incident_report_form/incident_report_success_view.dart';
+import 'package:bais_mobile/features/incident_report/views/incident_report_form/incident_report_view.dart';
+import 'package:bais_mobile/features/incident_report/views/monthly_report_form/monthly_report_view.dart';
+import 'package:bais_mobile/features/incident_report/views/report_landing_page_view.dart';
+import 'package:bais_mobile/features/incident_report/views/weekly_report_form/weekly_report_view.dart';
 import 'package:bais_mobile/features/incident_report/widgets/incident_map.dart';
 import 'package:bais_mobile/features/profile/bindings/profile_binding.dart';
 import 'package:bais_mobile/features/profile/views/profile_view.dart';
@@ -31,9 +35,14 @@ class Routes {
 
   static const String profile = '/profile';
 
+  static const String reportLanding = '/lading-page-report';
   static const String incidentReport = '/incident-report';
   static const String incidentReportMaps = '/incident-report-maps';
+  static const String incidentReportSuccess = '/incident-report-success';
   static const String incidentReportHistory = '/incident-report-history';
+
+  static const String weeklyReport = '/weekly-report';
+  static const String monthlyReport = '/monthly-report';
 
   static const String task = '/task';
   static const String taskDetail = '/task-detail';
@@ -74,14 +83,33 @@ class AppPages {
       binding: ChatBotBinding(),
     ),
     GetPage(
+      name: Routes.reportLanding,
+      page: () => const ReportLandingPageView(),
+      binding: IncidentReportBinding(),
+    ),
+    GetPage(
       name: Routes.incidentReport,
       page: () => const IncidentReportView(),
+      binding: IncidentReportBinding(),
+    ),
+    GetPage(
+      name: Routes.weeklyReport,
+      page: () => const WeeklyReportView(),
+      binding: IncidentReportBinding(),
+    ),
+    GetPage(
+      name: Routes.monthlyReport,
+      page: () => const MonthlyReportView(),
       binding: IncidentReportBinding(),
     ),
     GetPage(
       name: Routes.incidentReportMaps,
       page: () => const IncidentMap(),
       binding: IncidentReportBinding(),
+    ),
+    GetPage(
+      name: Routes.incidentReportSuccess,
+      page: () => const IncidentReportSuccessView(),
     ),
     GetPage(
       name: Routes.incidentReportHistory,

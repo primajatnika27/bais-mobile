@@ -58,9 +58,10 @@ class SignInController extends GetxController {
         );
         User? user = userCredential.user;
         if (user != null) {
+          String userDocId = userQuery.docs.first.id;
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('userEmail', user.email ?? '');
-          await prefs.setString('userId', user.uid);
+          await prefs.setString('userId', userDocId);
           await prefs.setString('userName', userQuery.docs.first['full_name']);
           await prefs.setBool('isLogin', true);
 

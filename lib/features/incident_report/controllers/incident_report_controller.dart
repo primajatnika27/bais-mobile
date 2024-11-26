@@ -1,3 +1,5 @@
+import 'package:bais_mobile/config/routes.dart';
+import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
 import 'package:bais_mobile/core/helpers/database_helper.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/dropdown_input.dart';
@@ -10,12 +12,15 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IncidentReportController extends GetxController {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   // Firebase FireStore instance
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  var usersId = "".obs;
 
   final TextEditingController reporterNameController = TextEditingController();
   final TextEditingController incidentDateController = TextEditingController();
@@ -73,12 +78,22 @@ class IncidentReportController extends GetxController {
     incidentLevelController.setItems(incidentLevel);
 
     getLocation();
+    getUserData();
   }
 
   @override
   void onClose() {
     super.onClose();
     incidentTypeController.dispose();
+  }
+
+  void showLoadingPopup() {
+    GeneralDialog.showLoadingDialog();
+  }
+
+  Future<void> getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    usersId.value = prefs.getString('userId') ?? '';
   }
 
   void addMarker(LatLng position) {
@@ -97,6 +112,8 @@ class IncidentReportController extends GetxController {
   }
 
   void onSubmitTaskReport() async {
+    showLoadingPopup();
+    payload.userId = usersId.value;
     payload.reporterName = reporterNameController.text;
     payload.incidentDate = incidentDateController.text;
     payload.incidentTime = incidentTimeController.text;
@@ -115,6 +132,8 @@ class IncidentReportController extends GetxController {
       backgroundColor: AppTheme.green500,
       colorText: Colors.white,
     );
+
+    Get.toNamed(Routes.incidentReportSuccess);
   }
 
   Future<void> saveDataToLocal(String data) async {

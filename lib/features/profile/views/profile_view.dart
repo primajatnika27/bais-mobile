@@ -13,11 +13,13 @@ class ProfileView extends GetView<CreateProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(CreateProfileController());
     return Scaffold(
       appBar: AppBarGeneral(
         title: '',
         backgroundColor: AppTheme.primary,
         onTapLeading: () => Get.back(),
+        withLeading: false,
         withTabBar: true,
       ),
       body: Column(

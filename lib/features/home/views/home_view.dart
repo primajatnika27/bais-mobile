@@ -4,6 +4,7 @@ import 'package:bais_mobile/features/dashboard/views/dashboard_view.dart';
 import 'package:bais_mobile/features/history_report/views/history_report_view.dart';
 import 'package:bais_mobile/features/home/controllers/navigation_controller.dart';
 import 'package:bais_mobile/features/home/widgets/bottom_navigation_widget.dart';
+import 'package:bais_mobile/features/profile/views/profile_view.dart';
 import 'package:bais_mobile/features/task/views/task_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,7 @@ class HomeView extends GetView<NavigationController> {
                 controller.currentIndex.value == 0 ? const DashboardView() : Container(),
                 controller.currentIndex.value == 1 ? const TaskView() : Container(),
                 controller.currentIndex.value == 2 ? const ChatBotView() : Container(),
+                controller.currentIndex.value == 3 ? const ProfileView() : Container(),
               ],
             ),
           ),

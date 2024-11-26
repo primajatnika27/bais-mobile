@@ -49,10 +49,10 @@ class TaskItemWidget extends StatelessWidget {
                     color: color,
                   ),
                   child: Center(
-                    child: SvgPicture.asset(
+                    child: Image.asset(
                       svgPath,
-                      width: 22,
-                      height: 22,
+                      width: 30,
+                      height: 30,
                     ),
                   ),
                 ),
@@ -62,7 +62,7 @@ class TaskItemWidget extends StatelessWidget {
                   style: const TextStyle(
                     color: AppTheme.secondary900,
                     fontWeight: FontWeight.w900,
-                    fontSize: 24,
+                    fontSize: 28,
                   ),
                 ),
               ],
@@ -71,7 +71,7 @@ class TaskItemWidget extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 16,
                 color: AppTheme.secondary800,
                 fontWeight: FontWeight.w700,
               ),
