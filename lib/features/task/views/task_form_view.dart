@@ -2,6 +2,8 @@ import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/widgets/app_bar_general.dart';
 import 'package:bais_mobile/core/widgets/bottom_button_widget.dart';
 import 'package:bais_mobile/core/widgets/card_wrapper_widget.dart';
+import 'package:bais_mobile/core/widgets/file_section_input.dart';
+import 'package:bais_mobile/core/widgets/photo_section_input.dart';
 import 'package:bais_mobile/core/widgets/text_area_input.dart';
 import 'package:bais_mobile/core/widgets/text_field_widget.dart';
 import 'package:bais_mobile/data/models/task_model.dart';
@@ -10,15 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TaskFormView extends GetView<CreateTaskController> {
-  const TaskFormView({super.key});
+  TaskFormView({super.key}) : cameraImagePath = Rxn<String>();
+
+  final Rxn<String> cameraImagePath;
+
+  void setCameraImagePath(String? path) {
+    cameraImagePath.value = path;
+  }
 
   @override
   Widget build(BuildContext context) {
     TaskModel task = Get.arguments;
-
-    controller.taskTitleController.text = task.reportTitle ?? '';
-    controller.taskResultController.text = task.result ?? '';
-
     return Scaffold(
       appBar: AppBarGeneral(
         title: 'Task Form',
@@ -46,6 +50,19 @@ class TaskFormView extends GetView<CreateTaskController> {
                     placeholder: 'ex: result',
                     controller: controller.taskResultController,
                   ),
+                  const SizedBox(height: 16),
+                  PhotoSectionInput(
+                    title: 'Pick Photo',
+                    sampleText: 'ex: Task photo',
+                    inputModel: controller.taskImage,
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 16),
+                  FileSectionInput(
+                    title: 'Pick File',
+                    inputModel: controller.taskFile,
+                    isRequired: true,
+                  ),
                 ],
               ),
             ),
@@ -56,20 +73,14 @@ class TaskFormView extends GetView<CreateTaskController> {
         child: BottomButtonWidget(
           title: 'Send',
           onTap: () {
-            final updatedTask = TaskModel(
-              id: task.id,
-              title: task.title,
-              reportTitle: controller.taskTitleController.text,
-              description: task.description,
-              assigned: task.assigned,
-              startDate: task.startDate,
-              endDate: task.endDate,
-              result: controller.taskResultController.text,
-              status: 'Submitted',
+            final updatedTask = task.copyWith();
+            controller.updateTaskWithUpload(
+              updatedTask,
+              controller.taskTitleController.text,
+              controller.taskResultController.text,
+              controller.taskImage.value,
+              controller.taskFile.value,
             );
-
-            controller.updateTask(task.id!, updatedTask);
-            Get.offAndToNamed(Routes.home);
           },
         ),
       ),

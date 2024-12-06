@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
@@ -39,20 +40,17 @@ class SignInController extends GetxController {
   Future<void> signIn() async {
     showLoadingPopup();
     try {
-      // Ambil email dari controller
       String email = usernameController.text.trim();
 
-      // Cek apakah pengguna aktif di Firestore
       QuerySnapshot userQuery = await _fireStore
           .collection('users')
           .where('email', isEqualTo: email)
           .get();
 
-      print(email);
-      print(userQuery.docs.isNotEmpty);
-
-      if (userQuery.docs.isNotEmpty && userQuery.docs.first['isActive'] == true) {
-        UserCredential userCredential = await _fireAuth.signInWithEmailAndPassword(
+      if (userQuery.docs.isNotEmpty &&
+          userQuery.docs.first['isActive'] == true) {
+        UserCredential userCredential =
+            await _fireAuth.signInWithEmailAndPassword(
           email: email,
           password: passwordController.text.trim(),
         );
@@ -73,23 +71,22 @@ class SignInController extends GetxController {
         while (Get.isDialogOpen == true) {
           Get.back();
         }
-        // Jika pengguna tidak aktif
-        Get.snackbar(
+
+        GeneralDialog.showSnackBar(
+          ContentType.failure,
           'Failed',
           'Your account is not active. Please contact support.',
-          backgroundColor: AppTheme.red500,
-          colorText: Colors.white,
         );
       }
     } on FirebaseAuthException catch (e) {
       while (Get.isDialogOpen == true) {
         Get.back();
       }
-      Get.snackbar(
+
+      GeneralDialog.showSnackBar(
+        ContentType.failure,
         'Failed',
         e.message ?? 'An unexpected error occurred.',
-        backgroundColor: AppTheme.red500,
-        colorText: Colors.white,
       );
     }
   }

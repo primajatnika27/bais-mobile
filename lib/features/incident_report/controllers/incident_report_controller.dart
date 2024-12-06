@@ -1,26 +1,22 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
-import 'package:bais_mobile/core/helpers/database_helper.dart';
-import 'package:bais_mobile/core/themes/app_theme.dart';
+import 'package:bais_mobile/core/services/shared_preference_service.dart';
 import 'package:bais_mobile/core/widgets/dropdown_input.dart';
 import 'package:bais_mobile/core/widgets/photo_section_input.dart';
-import 'package:bais_mobile/data/models/form_data/task_report_form_data.dart';
 import 'package:bais_mobile/data/models/task_report_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bais_mobile/data/repositories/reports_repository.dart';
+import 'package:bais_mobile/data/repositories/storage_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IncidentReportController extends GetxController {
-  final DatabaseHelper _dbHelper = DatabaseHelper();
-
-  // Firebase FireStore instance
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-
-  var usersId = "".obs;
+  final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
+  final ReportsRepository _reportsRepository = ReportsRepository();
+  final StorageRepository _storageRepository = StorageRepository();
 
   final TextEditingController reporterNameController = TextEditingController();
   final TextEditingController incidentDateController = TextEditingController();
@@ -58,7 +54,7 @@ class IncidentReportController extends GetxController {
     currentIndex.value = index;
   }
 
-  var location = "Memuat lokasi...".obs;
+  var location = "Searching location...".obs;
   var currentLat = 0.0.obs;
   var currentLong = 0.0.obs;
   GoogleMapController? mapController;
@@ -78,7 +74,6 @@ class IncidentReportController extends GetxController {
     incidentLevelController.setItems(incidentLevel);
 
     getLocation();
-    getUserData();
   }
 
   @override
@@ -89,11 +84,6 @@ class IncidentReportController extends GetxController {
 
   void showLoadingPopup() {
     GeneralDialog.showLoadingDialog();
-  }
-
-  Future<void> getUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    usersId.value = prefs.getString('userId') ?? '';
   }
 
   void addMarker(LatLng position) {
@@ -112,35 +102,32 @@ class IncidentReportController extends GetxController {
   }
 
   void onSubmitTaskReport() async {
+    String? id = prefs.getValue('userId');
+
     showLoadingPopup();
-    payload.userId = usersId.value;
+    payload.userId = id;
     payload.reporterName = reporterNameController.text;
     payload.incidentDate = incidentDateController.text;
     payload.incidentTime = incidentTimeController.text;
     payload.incidentDescription = incidentDescriptionController.text;
     payload.incidentType = incidentTypeController.selectedValue.value;
     payload.incidentLevel = incidentLevelController.selectedValue.value;
-    payload.incidentPhotoPath = incidentPhotoModel.value.selectedImagePath;
     payload.incidentLocationLat = currentLat.value;
     payload.incidentLocationLng = currentLong.value;
     payload.incidentLocationAddress = location.value;
 
-    await _fireStore.collection('incident').add(payload.toJson());
-    Get.snackbar(
+    var imagePath = await _storageRepository
+        .uploadFile(incidentPhotoModel.value.selectedImagePath!);
+    payload.incidentPhotoPath = imagePath;
+
+    await _reportsRepository.addIncident(payload);
+    GeneralDialog.showSnackBar(
+      ContentType.success,
       'Success',
       'Incident Report has been submitted',
-      backgroundColor: AppTheme.green500,
-      colorText: Colors.white,
     );
 
     Get.toNamed(Routes.incidentReportSuccess);
-  }
-
-  Future<void> saveDataToLocal(String data) async {
-    final formData = TaskReportFormData(
-      payload: data,
-    );
-    await _dbHelper.insertTaskReport(formData);
   }
 
   Future<String> getAddressFromLatLng(LatLng position) async {

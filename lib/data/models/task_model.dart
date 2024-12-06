@@ -1,89 +1,164 @@
-abstract class Task {
-  Map<String, dynamic> toJson();
-}
+import 'dart:convert';
+
+TaskModel taskModelFromJson(String str) => TaskModel.fromJson(json.decode(str), '');
+
+String taskModelToJson(TaskModel data) => json.encode(data.toJson());
 
 class TaskModel {
   String? id;
-  String? title;
-  String? reportTitle;
-  String? description;
+  String? taskTitle;
+  String? taskDescription;
   String? address;
-  String? result;
-  Map<String, dynamic>? assigned;
+  Assigned? assigned;
   String? startDate;
+  double? latitude;
+  double? longitude;
   String? endDate;
   String? status;
+  List<Result>? result;
 
   TaskModel({
     this.id,
-    this.title,
-    this.reportTitle,
-    this.description,
+    this.taskTitle,
+    this.taskDescription,
     this.address,
-    this.result,
     this.assigned,
     this.startDate,
+    this.latitude,
+    this.longitude,
     this.endDate,
-    this.status
+    this.status,
+    this.result,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'reportTitle': reportTitle,
-      'description': description,
-      'address': address,
-      'result': result,
-      'assigned': assigned,
-      'startDate': startDate,
-      'endDate': endDate,
-      'status': status
-    };
-  }
+  TaskModel copyWith({
+    String? id,
+    String? taskTitle,
+    String? taskDescription,
+    String? address,
+    Assigned? assigned,
+    String? startDate,
+    double? latitude,
+    double? longitude,
+    String? endDate,
+    String? status,
+    List<Result>? result,
+  }) =>
+      TaskModel(
+        id: id ?? this.id,
+        taskTitle: taskTitle ?? this.taskTitle,
+        taskDescription: taskDescription ?? this.taskDescription,
+        address: address ?? this.address,
+        assigned: assigned ?? this.assigned,
+        startDate: startDate ?? this.startDate,
+        latitude: latitude ?? this.latitude,
+        longitude: longitude ?? this.longitude,
+        endDate: endDate ?? this.endDate,
+        status: status ?? this.status,
+        result: result ?? this.result,
+      );
 
-  factory TaskModel.fromJson(Map<String, dynamic> json) {
-    return TaskModel(
-      id: json['id'],
-      title: json['title'],
-      reportTitle: json['reportTitle'],
-      description: json['description'],
-      address: json['address'],
-      result: json['result'],
-      assigned: json['assigned'],
-      startDate: json['startDate'],
-      endDate: json['endDate'],
-      status: json['status']
-    );
-  }
+  factory TaskModel.fromJson(Map<String, dynamic> json, String id) => TaskModel(
+    id: id,
+    taskTitle: json["task_title"],
+    taskDescription: json["task_description"],
+    address: json["address"],
+    assigned: json["assigned"] == null ? null : Assigned.fromJson(json["assigned"]),
+    startDate: json["start_date"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
+    endDate: json["end_date"],
+    status: json["status"],
+    result: json["result"] == null ? [] : List<Result>.from(json["result"]!.map((x) => Result.fromJson(x))),
+  );
 
-  // Parse FireStore DocumentSnapshot ke TaskModel
-  factory TaskModel.fromMap(Map<String, dynamic> data, String documentId) {
-    return TaskModel(
-      id: documentId,
-      title: data['task_title'],
-      reportTitle: data['report_title'],
-      description: data['task_description'],
-      address: data['address'],
-      result: data['task_result'],
-      assigned: data['assigned'],
-      startDate: data['start_date'],
-      endDate: data['end_date'],
-      status: data['status'],
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "task_title": taskTitle,
+    "task_description": taskDescription,
+    "address": address,
+    "assigned": assigned?.toJson(),
+    "start_date": startDate,
+    "latitude": latitude,
+    "longitude": longitude,
+    "end_date": endDate,
+    "status": status,
+    "result": result == null ? [] : List<dynamic>.from(result!.map((x) => x.toJson())),
+  };
+}
 
-  Map<String, dynamic> toMap() {
-    return {
-      'task_title': title,
-      'report_title': reportTitle,
-      'task_description': description,
-      'address': address,
-      'task_result': result,
-      'assigned': assigned,
-      'start_date': startDate,
-      'end_date': endDate,
-      'status': status,
-    };
-  }
+class Assigned {
+  String? name;
+  String? id;
+  String? email;
+
+  Assigned({
+    this.name,
+    this.id,
+    this.email,
+  });
+
+  Assigned copyWith({
+    String? name,
+    String? id,
+    String? email,
+  }) =>
+      Assigned(
+        name: name ?? this.name,
+        id: id ?? this.id,
+        email: email ?? this.email,
+      );
+
+  factory Assigned.fromJson(Map<String, dynamic> json) => Assigned(
+    name: json["name"],
+    id: json["id"],
+    email: json["email"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "id": id,
+    "email": email,
+  };
+}
+
+class Result {
+  String? title;
+  String? result;
+  String? image;
+  String? file;
+
+  Result({
+    this.title,
+    this.result,
+    this.image,
+    this.file,
+  });
+
+  Result copyWith({
+    String? title,
+    String? result,
+    String? image,
+    String? file,
+  }) =>
+      Result(
+        title: title ?? this.title,
+        result: result ?? this.result,
+        image: image ?? this.image,
+        file: file ?? this.file,
+      );
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+    title: json["title"],
+    result: json["result"],
+    image: json["image"],
+    file: json["file"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "result": result,
+    "image": image,
+    "file": file,
+  };
 }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:rubber/rubber.dart';
 
 class DashboardView extends StatefulWidget {
@@ -64,7 +65,7 @@ class _DashboardViewState extends State<DashboardView>
                 Get.toNamed(Routes.videoStream);
               },
               child: const Icon(
-                Icons.video_call_sharp,
+                Iconsax.play,
                 color: AppTheme.white,
               ),
             ),
@@ -76,7 +77,7 @@ class _DashboardViewState extends State<DashboardView>
                 Get.toNamed(Routes.reportLanding);
               },
               child: const Icon(
-                Icons.add,
+                Iconsax.additem,
                 color: AppTheme.white,
               ),
             )

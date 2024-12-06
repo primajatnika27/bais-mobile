@@ -24,113 +24,166 @@ class TaskDetailView extends GetView<CreateTaskController> {
           Get.back();
         },
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: CardWrapperWidget(
-            title: 'Task ID:  ${task.id}',
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  detailInfo(
-                    'Task Name',
-                    task.title ?? '',
-                    isHighlighted: true,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Address',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          color: AppTheme.secondary250,
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: CardWrapperWidget(
+              title: 'Task ID:  ${task.id}',
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    detailInfo(
+                      'Task Name',
+                      task.taskTitle ?? '',
+                      isHighlighted: true,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Address',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: AppTheme.secondary250,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      InfoCard(
-                        text: task.address ?? '',
-                        borderColor: AppTheme.primary,
-                        backgroundColor: AppTheme.red100,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  detailInfo(
-                    'Description',
-                    task.description ?? '',
-                  ),
-                  detailInfo(
-                    'Status',
-                    task.status ?? '',
-                    isHighlighted: true,
-                  ),
-                  detailInfo(
-                    'Assigned To',
-                    task.assigned?['name'] ?? '',
-                  ),
-                  detailInfo(
-                    'Start Date',
-                    task.startDate ?? '',
-                  ),
-                  detailInfo(
-                    'End Date',
-                    task.endDate ?? '',
-                  ),
-                  task.status == 'Submitted' ||
-                          task.status == 'Completed' ||
-                          task.status == 'Rejected'
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Result',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: AppTheme.secondary250,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            InfoCard(text: task.result ?? ''),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                ],
+                        const SizedBox(height: 8),
+                        InfoCard(
+                          text: task.address ?? '',
+                          borderColor: AppTheme.primary,
+                          backgroundColor: AppTheme.red100,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    detailInfo(
+                      'Description',
+                      task.taskDescription ?? '',
+                    ),
+                    detailInfo(
+                      'Status',
+                      task.status ?? '',
+                      isHighlighted: true,
+                    ),
+                    detailInfo(
+                      'Assigned To',
+                      task.assigned?.name ?? '',
+                    ),
+                    detailInfo(
+                      'Start Date',
+                      task.startDate ?? '',
+                    ),
+                    detailInfo(
+                      'End Date',
+                      task.endDate ?? '',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: task.status == 'Submitted' ||
-              task.status == 'Completed'
-          ? const SizedBox.shrink()
-          : SafeArea(
-              child: BottomButtonWidget(
-                title: task.status != 'New Task' ? 'Add Report' : "Accept Task",
-                onTap: task.status != 'New Task'
-                    ? () {
-                        Get.toNamed(Routes.taskForm, arguments: task);
-                      }
-                    : () {
-                        final updatedTask = TaskModel(
-                          id: task.id,
-                          title: task.title,
-                          description: task.description,
-                          assigned: task.assigned,
-                          startDate: task.startDate,
-                          endDate: task.endDate,
-                          address: task.address,
-                          status: 'On Going',
-                        );
-
-                        controller.updateTask(task.id!, updatedTask);
-                        Get.back();
-                      },
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: CardWrapperWidget(
+              title: 'Result',
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: task.result?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Result ${index + 1}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppTheme.secondary250,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          InfoCard(
+                            text: task.result?[index].title ?? '',
+                            borderColor: AppTheme.primary,
+                            backgroundColor: AppTheme.red100,
+                          ),
+                          const SizedBox(height: 16),
+                          detailInfo(
+                            'Description',
+                            task.result?[index].result ?? '',
+                          ),
+                          detailInfo(
+                              'Document',
+                              isLink: true,
+                              task.result?[index].file ?? '', onDownload: () {
+                            controller
+                                .downloadFile(task.result?[index].file ?? '');
+                          }),
+                          detailInfo(
+                              'Photo',
+                              isLink: true,
+                              task.result?[index].image ?? '', onDownload: () {
+                            controller
+                                .downloadFile(task.result?[index].image ?? '');
+                          }),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar:
+          task.status == 'Submitted' || task.status == 'Completed'
+              ? const SizedBox.shrink()
+              : SafeArea(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: BottomButtonWidget(
+                          title: task.status != 'New Task'
+                              ? 'Update Report'
+                              : "Accept Task",
+                          onTap: task.status != 'New Task'
+                              ? () {
+                                  Get.toNamed(Routes.taskForm, arguments: task);
+                                }
+                              : () {
+                                  final updatedTask =
+                                      task.copyWith(status: 'On Going');
+                                  controller.updateTask(updatedTask);
+                                  Get.back();
+                                },
+                        ),
+                      ),
+                      task.status != 'New Task' ? Expanded(
+                        child: BottomButtonWidget(
+                          title: "Finish Task",
+                          fillColor: AppTheme.lightPrimary,
+                          onTap: () {
+                            final updatedTask = task.copyWith(status: 'Submitted');
+                            controller.updateTask(updatedTask);
+                            Get.back();
+                          },
+                        ),
+                      ) : const SizedBox.shrink(),
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -138,7 +191,9 @@ class TaskDetailView extends GetView<CreateTaskController> {
     String title,
     String value, {
     bool isHighlighted = false,
+    bool isLink = false,
     bool canCopy = false,
+    VoidCallback? onDownload,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -163,16 +218,33 @@ class TaskDetailView extends GetView<CreateTaskController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: isHighlighted
-                          ? AppTheme.primary
-                          : AppTheme.secondary800,
-                    ),
-                    textAlign: TextAlign.justify,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: isHighlighted
+                                ? AppTheme.primary
+                                : AppTheme.secondary800,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      isLink
+                          ? IconButton(
+                              constraints: const BoxConstraints(maxWidth: 20),
+                              icon: const Icon(
+                                Icons.download,
+                                color: AppTheme.primary,
+                                size: 20,
+                              ),
+                              onPressed: onDownload,
+                            )
+                          : Container(),
+                    ],
                   ),
                 ),
                 if (canCopy) // Add copy button conditionally

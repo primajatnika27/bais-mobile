@@ -1,11 +1,14 @@
 import 'package:bais_mobile/config/routes.dart';
+import 'package:bais_mobile/core/services/shared_preference_service.dart';
+import 'package:bais_mobile/data/repositories/profile_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logger/logger.dart';
 
 class CreateProfileController extends GetxController {
-  // Firebase FireStore instance
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  var logger = Logger();
+  final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
+  final ProfileRepository _profileRepository = ProfileRepository();
 
   var usersName = "".obs;
   var emailUser = "".obs;
@@ -15,34 +18,28 @@ class CreateProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getUserData();
+    onGetUserData();
   }
 
   void onSignOut() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-
+    await prefs.clear();
     Get.offAllNamed(Routes.signIn);
   }
 
-  Future<void> getUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('userEmail');
+  Future<void> onGetUserData() async {
+    var email = prefs.getValue('userEmail');
 
     try {
-      // Fetch data from Firestore
-      QuerySnapshot snapshot = await _fireStore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
+      var snapshot = await _profileRepository.getUserDataByEmail(email);
 
-      if (snapshot.docs.isNotEmpty) {
-        emailUser.value = snapshot.docs.first['email'];
-        usersName.value = snapshot.docs.first['full_name'];
-        phone.value = snapshot.docs.first['phone'].toString();
-        address.value = snapshot.docs.first['address'];
+      if (snapshot != null) {
+        var data = snapshot.docs.first.data() as Map<String, dynamic>;
+        usersName.value = data['full_name'] ?? '';
+        emailUser.value = email;
+        phone.value = data['phone'] ?? '';
+        address.value = data['address'] ?? '';
       }
-  } catch (e) {
+    } catch (e) {
       print("Error fetching data from Firestore: $e");
     }
   }

@@ -1,9 +1,33 @@
 import 'package:bais_mobile/data/models/chat_bot/chat_bot_model.dart';
 import 'package:bais_mobile/services/http_service.dart';
+import 'package:dio/dio.dart';
 
 class ChatBotProvider {
   final HttpService _httpService;
+
   ChatBotProvider(this._httpService);
+
+  Future<Response> postPredictFile(
+    String filePath,
+    String fileName, {
+    required Function(int, int) onSendProgress,
+  }) async {
+    try {
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(filePath, filename: fileName),
+        "tipe_data": "PDF",
+      });
+
+      return await _httpService.postFile(
+        '/predict',
+        formData,
+        onSendProgress: onSendProgress,
+      );
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 
   Future<ChatBotResponse> getPredict(String prompt) async {
     final response = await _httpService.post('/predict', {

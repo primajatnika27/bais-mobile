@@ -1,5 +1,6 @@
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/features/chat_bot/views/chat_bot_view.dart';
+import 'package:bais_mobile/features/chat_bot/views/upload_document_training_view.dart';
 import 'package:bais_mobile/features/dashboard/views/dashboard_view.dart';
 import 'package:bais_mobile/features/history_report/views/history_report_view.dart';
 import 'package:bais_mobile/features/home/controllers/navigation_controller.dart';
@@ -29,7 +30,7 @@ class HomeView extends GetView<NavigationController> {
               children: [
                 controller.currentIndex.value == 0 ? const DashboardView() : Container(),
                 controller.currentIndex.value == 1 ? const TaskView() : Container(),
-                controller.currentIndex.value == 2 ? const ChatBotView() : Container(),
+                controller.currentIndex.value == 2 ? const UploadDocumentTrainingView() : Container(),
                 controller.currentIndex.value == 3 ? const ProfileView() : Container(),
               ],
             ),

@@ -54,7 +54,7 @@ class TaskCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        data?.title ?? '',
+                        data?.taskTitle ?? '',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class TaskCard extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Text(data?.description ?? ''),
+                    Text(data?.taskDescription ?? ''),
                   ],
                 ),
               ),

@@ -1,28 +1,27 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
-import 'package:bais_mobile/core/themes/app_theme.dart';
+import 'package:bais_mobile/core/services/shared_preference_service.dart';
 import 'package:bais_mobile/core/widgets/dropdown_input.dart';
 import 'package:bais_mobile/data/models/weekly_report_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bais_mobile/data/repositories/reports_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MonthlyReportController extends GetxController {
-  // Firebase FireStore instance
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
+  final ReportsRepository _reportsRepository = ReportsRepository();
 
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   final TextEditingController totalIncidentController = TextEditingController();
   final TextEditingController reporterNameController = TextEditingController();
   final DropdownController<String> operationTypeController =
-  DropdownController<String>();
+      DropdownController<String>();
 
   final TextEditingController titleReportController = TextEditingController();
-  final TextEditingController descriptionReportController = TextEditingController();
-
-  var usersId = "".obs;
+  final TextEditingController descriptionReportController =
+      TextEditingController();
 
   /// Payload
   var payload = WeeklyReportModel();
@@ -44,7 +43,6 @@ class MonthlyReportController extends GetxController {
   @override
   void onInit() {
     operationTypeController.setItems(operationType);
-    getUserData();
     super.onInit();
   }
 
@@ -61,8 +59,10 @@ class MonthlyReportController extends GetxController {
   }
 
   void onSubmitReport() async {
+    String? id = prefs.getValue('userId');
+
     showLoadingPopup();
-    payload.userId = usersId.value;
+    payload.userId = id;
     payload.reporterName = reporterNameController.text;
     payload.operationType = operationTypeController.selectedValue.value;
     payload.title = titleReportController.text;
@@ -72,19 +72,17 @@ class MonthlyReportController extends GetxController {
     payload.totalIncident = int.parse(totalIncidentController.text);
     payload.reportType = 'Monthly';
 
-    await _fireStore.collection('reports').add(payload.toJson());
-    Get.snackbar(
+    await _reportsRepository.addReport(payload);
+    GeneralDialog.showSnackBar(
+      ContentType.success,
       'Success',
-      'Weekly Report has been submitted',
-      backgroundColor: AppTheme.green500,
-      colorText: Colors.white,
+      'Monthly Report has been submitted',
     );
 
     Get.toNamed(Routes.incidentReportSuccess);
   }
 
   DateTime parseDate(String dateString) {
-    // Assuming the format is "27 November 2024"
     final parts = dateString.split(' ');
     final day = int.parse(parts[0]);
     final month = _monthStringToNumber(parts[1]);
@@ -121,10 +119,5 @@ class MonthlyReportController extends GetxController {
       default:
         throw ArgumentError('Invalid month string');
     }
-  }
-
-  Future<void> getUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    usersId.value = prefs.getString('userId') ?? '';
   }
 }

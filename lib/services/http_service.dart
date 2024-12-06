@@ -35,7 +35,17 @@ class HttpService {
     _dio.options.headers['Content-Type'] = "application/json";
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
+  Future<Response> download(String path, String savePath) async {
+    try {
+      final response = await _dio.download(path, savePath);
+      return response;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Response> get(String path,
+      {Map<String, dynamic>? queryParameters}) async {
     try {
       final response = await _dio.get(path, queryParameters: queryParameters);
       return response;
@@ -44,11 +54,32 @@ class HttpService {
     }
   }
 
-  Future<Response> post(String path, dynamic data, {dynamic xVarData, Options? options}) async {
+  Future<Response> post(String path, dynamic data,
+      {dynamic xVarData, Options? options}) async {
     try {
       final response = await _dio.post(
         path,
         data: data,
+      );
+      return response;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Response> postFile(
+      String path,
+      dynamic data, {
+        dynamic xVarData,
+        Options? options,
+        Function(int, int)? onSendProgress, // Tambahkan parameter ini
+      }) async {
+    try {
+      final response = await _dio.post(
+        path,
+        data: data,
+        options: options,
+        onSendProgress: onSendProgress, // Gunakan parameter ini
       );
       return response;
     } on DioException catch (e) {
@@ -65,7 +96,8 @@ class HttpService {
         while (getx.Get.isDialogOpen == true) {
           getx.Get.back();
         }
-        GeneralSnackbar.show(message: "Connection timed out. Please try again.");
+        GeneralSnackbar.show(
+            message: "Connection timed out. Please try again.");
         throw TimeoutException(e.message ?? 'Timeout error occurred');
       case DioExceptionType.badResponse:
         throw ServerException(e.error?.toString() ?? 'Server error occurred');
@@ -83,25 +115,30 @@ class HttpService {
 
 class TimeoutException implements Exception {
   final String message;
+
   TimeoutException(this.message);
 }
 
 class ServerException implements Exception {
   final String message;
+
   ServerException(this.message);
 }
 
 class RequestCancelledException implements Exception {
   final String message;
+
   RequestCancelledException(this.message);
 }
 
 class CertificateException implements Exception {
   final String message;
+
   CertificateException(this.message);
 }
 
 class UnknownException implements Exception {
   final String message;
+
   UnknownException(this.message);
 }

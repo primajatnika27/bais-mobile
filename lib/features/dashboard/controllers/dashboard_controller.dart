@@ -99,7 +99,7 @@ class DashboardController extends GetxController
 
       // Map the documents to TaskReportModel
       tasks.value = snapshot.docs.map((doc) {
-        return TaskModel.fromJson(doc.data() as Map<String, dynamic>);
+        return TaskModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
 
       newTaskTotal.value = tasks

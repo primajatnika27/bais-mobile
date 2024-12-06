@@ -5,6 +5,7 @@ import 'package:bais_mobile/features/auth/signIn/bindings/signin_binding.dart';
 import 'package:bais_mobile/features/auth/signIn/views/signin_view.dart';
 import 'package:bais_mobile/features/chat_bot/bindings/chat_bot_binding.dart';
 import 'package:bais_mobile/features/chat_bot/views/chat_bot_view.dart';
+import 'package:bais_mobile/features/chat_bot/views/upload_document_training_view.dart';
 import 'package:bais_mobile/features/history_report/bindings/create_history_report_binding.dart';
 import 'package:bais_mobile/features/history_report/views/history_report_view.dart';
 import 'package:bais_mobile/features/home/bindings/home_binding.dart';
@@ -31,6 +32,8 @@ class Routes {
   static const String register = '/register';
   static const String registerSuccess = '/register-success';
   static const String home = '/home';
+
+  static const String chatTraining = '/chat-training';
   static const String chatBot = '/chat-bot';
 
   static const String profile = '/profile';
@@ -78,6 +81,11 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
+      name: Routes.chatTraining,
+      page: () => UploadDocumentTrainingView(),
+      binding: ChatBotBinding(),
+    ),
+    GetPage(
       name: Routes.chatBot,
       page: () => const ChatBotView(),
       binding: ChatBotBinding(),
@@ -123,7 +131,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.taskForm,
-      page: () => const TaskFormView(),
+      page: () => TaskFormView(),
       binding: CreateTaskBinding(),
     ),
     GetPage(

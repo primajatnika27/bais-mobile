@@ -1,6 +1,6 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
-import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,28 +54,22 @@ class CreateRegistrationController extends GetxController {
         Get.back();
       }
       if (e.code == 'email-already-in-use') {
-        print('The email address is already in use by another account.');
-        Get.snackbar(
+        GeneralDialog.showSnackBar(
+          ContentType.failure,
           'Failed',
           'The email address is already in use by another account.',
-          backgroundColor: AppTheme.red500,
-          colorText: Colors.white,
         );
       } else if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-        Get.snackbar(
+        GeneralDialog.showSnackBar(
+          ContentType.failure,
           'Failed',
           'The password provided is too weak.',
-          backgroundColor: AppTheme.red500,
-          colorText: Colors.white,
         );
       } else {
-        print(e.message);
-        Get.snackbar(
+        GeneralDialog.showSnackBar(
+          ContentType.failure,
           'Failed',
           e.message ?? 'An unexpected error occurred.',
-          backgroundColor: AppTheme.red500,
-          colorText: Colors.white,
         );
       }
     } catch (e) {

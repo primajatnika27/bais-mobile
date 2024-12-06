@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/core/themes/app_theme.dart';
 import 'package:bais_mobile/core/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -141,5 +142,23 @@ class GeneralDialog {
       ),
       barrierDismissible: false,
     );
+  }
+
+  static void showSnackBar(ContentType? type, String? title, String? message) {
+    final materialBanner = SnackBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      behavior: SnackBarBehavior.floating,
+      content: AwesomeSnackbarContent(
+        title: title ?? 'Oh Hey!!',
+        message: message ?? 'Please wait while we are signing you in.',
+        contentType: type!,
+        inMaterialBanner: true,
+      ),
+    );
+
+    ScaffoldMessenger.of(Get.context!)
+      ..hideCurrentMaterialBanner()
+      ..showSnackBar(materialBanner);
   }
 }

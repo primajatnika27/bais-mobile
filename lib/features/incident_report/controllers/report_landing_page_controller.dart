@@ -1,11 +1,13 @@
+import 'package:bais_mobile/core/services/shared_preference_service.dart';
 import 'package:bais_mobile/data/models/task_report_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bais_mobile/data/repositories/reports_repository.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logger/logger.dart';
 
 class ReportLandingPageController extends GetxController {
-  // Firebase FireStore instance
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  var logger = Logger();
+  final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
+  final ReportsRepository _reportsRepository = ReportsRepository();
 
   var taskReports = <TaskReportModel>[].obs;
 
@@ -16,26 +18,18 @@ class ReportLandingPageController extends GetxController {
 
   @override
   void onInit() {
-    getChartData();
+    onGetChartData();
     super.onInit();
   }
 
-  void getChartData() async {
-    print("Loading chart data from Firestore");
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var userId = prefs.getString('userId') ?? '';
+  void onGetChartData() async {
     try {
-      QuerySnapshot snapshot = await _fireStore
-          .collection('incident')
-          .where('user_id', isEqualTo: userId)
-          .get();
+      String? id = prefs.getValue('userId');
+      List<TaskReportModel> response = await _reportsRepository.getDailyReportById(id!);
+      logger.d(id);
+      logger.d(response.length);
 
-      // Map the documents to TaskReportModel
-      taskReports.value = snapshot.docs.map((doc) {
-        return TaskReportModel.fromJson(doc.data() as Map<String, dynamic>);
-      }).toList();
-
+      taskReports.value = response;
       medicalTreatmentTotal.value = taskReports
           .where((element) => element.incidentType == "Medical Incident")
           .length;
@@ -49,7 +43,7 @@ class ReportLandingPageController extends GetxController {
           .where((element) => element.incidentType == "Potential Hazard")
           .length;
     } catch (e) {
-      print("Error fetching data from Firestore: $e");
+      logger.e(e);
     }
   }
 }
