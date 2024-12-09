@@ -15,6 +15,7 @@ abstract class APIResult {
 }
 
 abstract class TableCollection {
+  static const String users = 'users';
   static const String task = 'tasks';
   static const String incidents = 'incident';
   static const String reports = 'reports';

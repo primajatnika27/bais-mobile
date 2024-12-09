@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bais_mobile/core/constants/api_constant.dart';
 import 'package:bais_mobile/services/http_service.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +20,7 @@ class StorageProvider {
     useSSL: true,
   );
 
+
   Future<String> uploadFile(String path) async {
     const bucket = 'bais-bucket';
 
@@ -33,21 +36,17 @@ class StorageProvider {
 
   Future<Response> downloadFile(String fileName) async {
     const bucket = 'bais-bucket';
-
+    // Get the directory to save the file
+    Directory? downloadDir = Directory('/storage/emulated/0/Download');
+    print(downloadDir.path);
     try {
-      if (await Permission.storage.request().isGranted) {
-        // Get the directory to save the file
-        final downloadPath = await getDownloadsDirectory();
-        String filePath = '${downloadPath?.path}/$fileName';
+      String filePath = '${downloadDir.path}/$fileName';
 
-        final url =
-        await minio.presignedGetObject(bucket, fileName, expires: 1000);
-        var response = await _httpService.download(url, filePath);
+      final url =
+      await minio.presignedGetObject(bucket, fileName, expires: 1000);
+      var response = await _httpService.download(url, filePath);
 
-        return response;
-      }
-
-      return Response(requestOptions: RequestOptions(path: ''));
+      return response;
     } catch (e) {
       print(e);
       return Response(requestOptions: RequestOptions(path: ''));

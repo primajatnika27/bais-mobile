@@ -4,8 +4,9 @@ import 'package:dio/dio.dart';
 
 class ChatBotProvider {
   final HttpService _httpService;
+  final HttpService _httpServiceUpload;
 
-  ChatBotProvider(this._httpService);
+  ChatBotProvider(this._httpService, this._httpServiceUpload);
 
   Future<Response> postPredictFile(
     String filePath,
@@ -18,7 +19,7 @@ class ChatBotProvider {
         "tipe_data": "PDF",
       });
 
-      return await _httpService.postFile(
+      return await _httpServiceUpload.postFile(
         '/predict',
         formData,
         onSendProgress: onSendProgress,

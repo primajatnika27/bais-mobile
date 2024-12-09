@@ -127,6 +127,7 @@ class TaskDetailView extends GetView<CreateTaskController> {
                               'Document',
                               isLink: true,
                               task.result?[index].file ?? '', onDownload: () {
+                                print("Download Document");
                             controller
                                 .downloadFile(task.result?[index].file ?? '');
                           }),
@@ -134,6 +135,7 @@ class TaskDetailView extends GetView<CreateTaskController> {
                               'Photo',
                               isLink: true,
                               task.result?[index].image ?? '', onDownload: () {
+                            print("Download File");
                             controller
                                 .downloadFile(task.result?[index].image ?? '');
                           }),
@@ -213,14 +215,13 @@ class TaskDetailView extends GetView<CreateTaskController> {
           ),
           const SizedBox(width: 8),
           Expanded(
-            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
                   child: Row(
                     children: [
-                      Flexible(
+                      !isLink ? Flexible(
                         child: Text(
                           value,
                           style: TextStyle(
@@ -232,16 +233,21 @@ class TaskDetailView extends GetView<CreateTaskController> {
                           ),
                           textAlign: TextAlign.justify,
                         ),
-                      ),
+                      ) : const SizedBox(),
+                      isLink ? const Spacer() : const SizedBox(),
                       isLink
-                          ? IconButton(
-                              constraints: const BoxConstraints(maxWidth: 20),
-                              icon: const Icon(
-                                Icons.download,
-                                color: AppTheme.primary,
-                                size: 20,
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                               onPressed: onDownload,
+                              child: const Icon(
+                                Icons.download,
+                                color: AppTheme.white,
+                              ),
                             )
                           : Container(),
                     ],

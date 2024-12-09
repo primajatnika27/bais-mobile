@@ -104,6 +104,7 @@ class CreateTaskController extends GetxController {
   }
 
   Future<void> downloadFile(String fileName) async {
+    logger.d("fileName: $fileName");
     var response = await _storageRepository.downloadFile(fileName);
 
     if (response.statusCode == 200) {

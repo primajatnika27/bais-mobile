@@ -9,7 +9,8 @@ class ChatBotRepository {
 
   ChatBotRepository() {
     final httpService = HttpService(baseUrl: ApiConstant.chatBotUrl);
-    _provider = ChatBotProvider(httpService);
+    final httpServiceUpload = HttpService(baseUrl: ApiConstant.chatBotUploadUrl);
+    _provider = ChatBotProvider(httpService, httpServiceUpload);
   }
 
   Future<Response> postPredictFile(

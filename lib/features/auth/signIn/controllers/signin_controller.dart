@@ -1,17 +1,15 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/dialogs/general_dialogs.dart';
-import 'package:bais_mobile/core/themes/app_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bais_mobile/core/services/shared_preference_service.dart';
+import 'package:bais_mobile/data/repositories/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInController extends GetxController {
-  // Firebase FireStore instance
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+  final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
+  final AuthRepository _authRepository = AuthRepository();
 
   RxBool showPassword = false.obs;
   TextEditingController usernameController = TextEditingController();
@@ -28,8 +26,7 @@ class SignInController extends GetxController {
 
   Future<void> checkLogin() async {
     showLoadingPopup();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('isLogin') == true) {
+    if (prefs.getValue('isLogin') == true) {
       Get.offAndToNamed(Routes.home);
     }
     while (Get.isDialogOpen == true) {
@@ -42,30 +39,33 @@ class SignInController extends GetxController {
     try {
       String email = usernameController.text.trim();
 
-      QuerySnapshot userQuery = await _fireStore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
+      var userQuery = await _authRepository.getUserDataByEmail(email);
 
-      if (userQuery.docs.isNotEmpty &&
-          userQuery.docs.first['isActive'] == true) {
-        UserCredential userCredential =
-            await _fireAuth.signInWithEmailAndPassword(
-          email: email,
-          password: passwordController.text.trim(),
+      if (userQuery?['isActive'] == true) {
+        User? user = await _authRepository.login(
+          email,
+          passwordController.text.trim(),
         );
-        User? user = userCredential.user;
-        if (user != null) {
-          String userDocId = userQuery.docs.first.id;
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userEmail', user.email ?? '');
-          await prefs.setString('userId', userDocId);
-          await prefs.setString('userName', userQuery.docs.first['full_name']);
-          await prefs.setBool('isLogin', true);
 
-          await prefs.setString('initial-route', Routes.home);
+        if (user != null) {
+          String userDocId = userQuery?.id ?? '';
+          await prefs.setValue('userEmail', user.email ?? '');
+          await prefs.setValue('userId', userDocId);
+          await prefs.setValue('userName', userQuery?['full_name']);
+          await prefs.setValue('isLogin', true);
+          await prefs.setValue('initial-route', Routes.home);
 
           Get.offAndToNamed(Routes.home);
+        } else {
+          while (Get.isDialogOpen == true) {
+            Get.back();
+          }
+
+          GeneralDialog.showSnackBar(
+            ContentType.failure,
+            'Failed',
+            'Invalid email or password.',
+          );
         }
       } else {
         while (Get.isDialogOpen == true) {

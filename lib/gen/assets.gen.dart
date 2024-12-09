@@ -18,17 +18,30 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_arrow_back.svg
   String get icArrowBack => 'assets/icons/ic_arrow_back.svg';
 
+  /// File path: assets/icons/ic_arrow_right.svg
+  String get icArrowRight => 'assets/icons/ic_arrow_right.svg';
+
   /// File path: assets/icons/ic_avatar.svg
   String get icAvatar => 'assets/icons/ic_avatar.svg';
 
   /// File path: assets/icons/ic_calendar.svg
   String get icCalendar => 'assets/icons/ic_calendar.svg';
 
+  /// File path: assets/icons/ic_chat.svg
+  String get icChat => 'assets/icons/ic_chat.svg';
+
   /// File path: assets/icons/ic_check_tab.svg
   String get icCheckTab => 'assets/icons/ic_check_tab.svg';
 
   /// File path: assets/icons/ic_checklist.svg
   String get icChecklist => 'assets/icons/ic_checklist.svg';
+
+  /// File path: assets/icons/ic_complete.png
+  AssetGenImage get icComplete =>
+      const AssetGenImage('assets/icons/ic_complete.png');
+
+  /// File path: assets/icons/ic_daily.png
+  AssetGenImage get icDaily => const AssetGenImage('assets/icons/ic_daily.png');
 
   /// File path: assets/icons/ic_eye_close.svg
   String get icEyeClose => 'assets/icons/ic_eye_close.svg';
@@ -45,30 +58,63 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_merchant.svg
   String get icMerchant => 'assets/icons/ic_merchant.svg';
 
+  /// File path: assets/icons/ic_monthly.png
+  AssetGenImage get icMonthly =>
+      const AssetGenImage('assets/icons/ic_monthly.png');
+
+  /// File path: assets/icons/ic_new.png
+  AssetGenImage get icNew => const AssetGenImage('assets/icons/ic_new.png');
+
+  /// File path: assets/icons/ic_ongoing.png
+  AssetGenImage get icOngoing =>
+      const AssetGenImage('assets/icons/ic_ongoing.png');
+
+  /// File path: assets/icons/ic_reject.png
+  AssetGenImage get icReject =>
+      const AssetGenImage('assets/icons/ic_reject.png');
+
   /// File path: assets/icons/ic_setting_white.svg
   String get icSettingWhite => 'assets/icons/ic_setting_white.svg';
 
+  /// File path: assets/icons/ic_submitted.png
+  AssetGenImage get icSubmitted =>
+      const AssetGenImage('assets/icons/ic_submitted.png');
+
   /// File path: assets/icons/ic_trand_up.svg
   String get icTrandUp => 'assets/icons/ic_trand_up.svg';
+
+  /// File path: assets/icons/ic_weekly.png
+  AssetGenImage get icWeekly =>
+      const AssetGenImage('assets/icons/ic_weekly.png');
 
   /// Directory path: assets/icons/navigation
   $AssetsIconsNavigationGen get navigation => const $AssetsIconsNavigationGen();
 
   /// List of all assets
-  List<String> get values => [
+  List<dynamic> get values => [
         icAddCircle,
         icArrowBack,
+        icArrowRight,
         icAvatar,
         icCalendar,
+        icChat,
         icCheckTab,
         icChecklist,
+        icComplete,
+        icDaily,
         icEyeClose,
         icEyeOpen,
         icLock,
         icLogo,
         icMerchant,
+        icMonthly,
+        icNew,
+        icOngoing,
+        icReject,
         icSettingWhite,
-        icTrandUp
+        icSubmitted,
+        icTrandUp,
+        icWeekly
       ];
 }
 
@@ -87,6 +133,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgLogo =>
       const AssetGenImage('assets/images/img_logo.png');
 
+  /// File path: assets/images/logo-default.png
+  AssetGenImage get logoDefault =>
+      const AssetGenImage('assets/images/logo-default.png');
+
   /// File path: assets/images/logo-maruti.png
   AssetGenImage get logoMaruti =>
       const AssetGenImage('assets/images/logo-maruti.png');
@@ -98,12 +148,22 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/svg
   $AssetsImagesSvgGen get svg => const $AssetsImagesSvgGen();
 
+  /// File path: assets/images/ticker.json
+  String get ticker => 'assets/images/ticker.json';
+
   /// List of all assets
-  List<AssetGenImage> get values => [icEmpty, imgAppLogo, imgLogo, logoMaruti];
+  List<dynamic> get values =>
+      [icEmpty, imgAppLogo, imgLogo, logoDefault, logoMaruti, ticker];
 }
 
 class $AssetsIconsNavigationGen {
   const $AssetsIconsNavigationGen();
+
+  /// File path: assets/icons/navigation/chat-active.svg
+  String get chatActive => 'assets/icons/navigation/chat-active.svg';
+
+  /// File path: assets/icons/navigation/chat.svg
+  String get chat => 'assets/icons/navigation/chat.svg';
 
   /// File path: assets/icons/navigation/history-active.svg
   String get historyActive => 'assets/icons/navigation/history-active.svg';
@@ -132,6 +192,8 @@ class $AssetsIconsNavigationGen {
 
   /// List of all assets
   List<String> get values => [
+        chatActive,
+        chat,
         historyActive,
         history,
         homeActive,
@@ -186,6 +248,12 @@ class $AssetsImagesSvgGen {
 class $AssetsImagesSvgNavigationGen {
   const $AssetsImagesSvgNavigationGen();
 
+  /// File path: assets/images/svg/navigation/chat-active.svg
+  String get chatActive => 'assets/images/svg/navigation/chat-active.svg';
+
+  /// File path: assets/images/svg/navigation/chat.svg
+  String get chat => 'assets/images/svg/navigation/chat.svg';
+
   /// File path: assets/images/svg/navigation/history-active.svg
   String get historyActive => 'assets/images/svg/navigation/history-active.svg';
 
@@ -213,6 +281,8 @@ class $AssetsImagesSvgNavigationGen {
 
   /// List of all assets
   List<String> get values => [
+        chatActive,
+        chat,
         historyActive,
         history,
         homeActive,

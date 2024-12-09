@@ -1,7 +1,7 @@
 import 'package:bais_mobile/config/routes.dart';
 import 'package:bais_mobile/core/services/shared_preference_service.dart';
+import 'package:bais_mobile/data/repositories/auth_repository.dart';
 import 'package:bais_mobile/data/repositories/profile_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -9,6 +9,7 @@ class CreateProfileController extends GetxController {
   var logger = Logger();
   final SharedPreferenceService prefs = Get.find<SharedPreferenceService>();
   final ProfileRepository _profileRepository = ProfileRepository();
+  final AuthRepository _authRepository = AuthRepository();
 
   var usersName = "".obs;
   var emailUser = "".obs;
@@ -22,6 +23,7 @@ class CreateProfileController extends GetxController {
   }
 
   void onSignOut() async {
+    await _authRepository.logout();
     await prefs.clear();
     Get.offAllNamed(Routes.signIn);
   }
